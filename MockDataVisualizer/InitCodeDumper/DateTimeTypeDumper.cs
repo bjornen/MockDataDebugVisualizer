@@ -15,12 +15,14 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public override string GetPrivateInitCodeDump()
         {
-            return GetPublicInitCodeDump();
+            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, GetPublicInitCodeDump());
         }
 
         public override string DumpPrivate(string initCode, string parentName, string elementNameInParent)
         {
-            throw new NotImplementedException();
+            var memberInitCode = GetPrivateInitCodeDump();
+            initCode = string.Format("{0}{1}{2};", initCode, Environment.NewLine, memberInitCode);
+            return initCode;
         }
 
         public override string DumpPublic(string initCode, string parentName, string elementNameInParent)
