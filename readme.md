@@ -1,6 +1,7 @@
 # MockDataDebugVisualizer #
 
-A Vs2010 debug visualizer plugin to create current state initilization code for an object.
+A VS2010 debug visualizer plugin to create current state initilization code for an object.
+This is still on a proof of concept level.
 
 ## Usage ##
 
