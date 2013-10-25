@@ -23,6 +23,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             foreach (var element in enumerableElement)
             {
                 count++;
+
                 var dumper = GetDumper(this, element, element.GetType().Name);
 
                 var elementInitCode = dumper.GetPublicInitCode();
