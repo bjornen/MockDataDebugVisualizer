@@ -47,6 +47,7 @@
     <Compile Include="DebugVisualizers\AbstractMockDataObjectSource.cs" />
     <Compile Include="DebugVisualizers\AbstractMockDataVisualizer.cs" />
     <Compile Include="InitCodeDumper\ArrayTypeDumper.cs" />
+    <Compile Include="InitCodeDumper\CodeBuilder.cs" />
     <Compile Include="InitCodeDumper\DateTimeTypeDumper.cs" />
     <Compile Include="InitCodeDumper\DictionaryTypeDumper.cs" />
     <Compile Include="InitCodeDumper\Dumper.cs" />
