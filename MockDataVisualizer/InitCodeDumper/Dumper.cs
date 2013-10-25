@@ -24,14 +24,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         internal IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } }
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        public string InitCode { get; set; }
-        public string PrivateInitCode { get; set; }
+        public abstract string GetPublicInitCode();
+        public abstract string GetPrivateInitCode();
 
-        public abstract string GetPublicInitCodeDump();
-        public abstract string GetPrivateInitCodeDump();
-
-        public abstract string DumpPublic(string initCode, string parentName, string elementNameInParent);
-        public abstract string DumpPrivate(string initCode, string parentName, string elementNameInParent);
+        public abstract string AddPublic(string initCode, string parentName, string elementNameInParent);
+        public abstract string AddPrivate(string initCode, string parentName, string elementNameInParent);
         
         protected Dumper(Dumper parent, object element, string name)
         {
@@ -46,7 +43,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             var dumper = InitDumper(o);
 
-            var initCode = dumper.GetPublicInitCodeDump();
+            var initCode = dumper.GetPublicInitCode();
 
             var nameForMethod = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(dumper.ElementName);
 
@@ -62,7 +59,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             var dumper = InitDumper(o);
 
-            return string.Format("{0}", dumper.GetPublicInitCodeDump());
+            return string.Format("{0}", dumper.GetPublicInitCode());
         }
 
         private static Dumper InitDumper(object o)

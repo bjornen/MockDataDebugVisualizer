@@ -10,7 +10,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
         }
 
-        public override string GetPublicInitCodeDump()
+        public override string GetPublicInitCode()
         {
             var genericArguments = Type.GetGenericArguments();
 
@@ -29,7 +29,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 var rep = GetDumper(this, element, element.GetType().Name);
 
-                var elementInitCode = rep.GetPublicInitCodeDump();
+                var elementInitCode = rep.GetPublicInitCode();
                 
                 if (element is ValueType)
                 {
@@ -42,22 +42,22 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 }
             }
 
-            return string.Format("{0}{1}{2}", InitCode, Environment.NewLine, initCode);
+            return string.Format("{0}{1}", Environment.NewLine, initCode);
         }
 
-        public override string GetPrivateInitCodeDump()
+        public override string GetPrivateInitCode()
         {
             throw new NotImplementedException();
         }
 
-        public override string DumpPublic(string initCode, string parentName, string elementNameInParent)
+        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCodeDump(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
         }
 
-        public override string DumpPrivate(string initCode, string parentName, string elementNameInParent)
+        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCodeDump(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
         }
     }
 }

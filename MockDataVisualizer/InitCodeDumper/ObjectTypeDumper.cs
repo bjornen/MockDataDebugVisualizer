@@ -18,7 +18,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             AddFoundElement(element, ElementName);
         }
 
-        public override string GetPublicInitCodeDump()
+        public override string GetPublicInitCode()
         {
             string initCode;
             var typeName = ResolveInitTypeName(Element.GetType());
@@ -57,13 +57,13 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
                         
-                        initCode = dumper.DumpPublic(initCode, ElementName, member.Name);
+                        initCode = dumper.AddPublic(initCode, ElementName, member.Name);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        initCode = dumper.DumpPrivate(initCode, ElementName, member.Name);
+                        initCode = dumper.AddPrivate(initCode, ElementName, member.Name);
                     }
                 }
 
@@ -76,27 +76,28 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return initCode;
         }
 
-        public override string GetPrivateInitCodeDump()
+        public override string GetPrivateInitCode()
         {
-            return GetPublicInitCodeDump();
+            return GetPublicInitCode();
         }
 
-        public override string DumpPublic(string initCode, string parentName, string elementNameInParent)
+        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
         {
-            //if (Type.GetConstructor(Type.EmptyTypes) == null) return string.Empty;
+            var memberInitCode = GetPublicInitCode();
 
-            var memberInitCode = GetPublicInitCodeDump();
             initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, memberInitCode);
+            
             initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, elementNameInParent, ElementName);
+            
             return initCode;
         }
 
-        public override string DumpPrivate(string initCode, string parentName, string elementNameInParent)
+        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
         {
-            //if (Type.GetConstructor(Type.EmptyTypes) == null) return string.Empty;
+            var memberInitCode = GetPrivateInitCode();
 
-            var memberInitCode = GetPrivateInitCodeDump();
             initCode = string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, memberInitCode, Environment.NewLine, parentName, elementNameInParent, ElementName);
+            
             return initCode;
         }
     }
