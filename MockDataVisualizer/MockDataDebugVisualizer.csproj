@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugVisualizers\InitCode\InitCodeObjectSource.cs" />
+    <Compile Include="DebugVisualizers\InitCode\InitCodeVisualizer.cs" />
+    <Compile Include="DebugVisualizers\AbstractMockDataObjectSource.cs" />
+    <Compile Include="DebugVisualizers\AbstractMockDataVisualizer.cs" />
     <Compile Include="InitCodeDumper\ArrayTypeDumper.cs" />
     <Compile Include="InitCodeDumper\DateTimeTypeDumper.cs" />
     <Compile Include="InitCodeDumper\DictionaryTypeDumper.cs" />
@@ -52,8 +56,8 @@
     <Compile Include="InitCodeDumper\StringTypeDumper.cs" />
     <Compile Include="InitCodeDumper\GuidTypeDumper.cs" />
     <Compile Include="InitCodeDumper\ValueTypeDumper.cs" />
-    <Compile Include="MockDataObjectSource.cs" />
-    <Compile Include="MockDataVisualizer.cs" />
+    <Compile Include="DebugVisualizers\InitCodeMethod\InitCodeMethodObjectSource.cs" />
+    <Compile Include="DebugVisualizers\InitCodeMethod\InitCodeMethodVisualizer.cs" />
     <Compile Include="ObjectTextDumper\ObjectDumper2.cs" />
     <Compile Include="ObjectTextDumper\ObjectTextDumper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +65,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

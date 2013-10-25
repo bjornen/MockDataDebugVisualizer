@@ -198,14 +198,14 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return initTypeName;
         }
 
+        internal static string ResolveTypeName(Type type)
+        {
+            return IsGenericType(type) ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
+        }
+
         internal static bool IsGenericType(Type type)
         {
             return type.GetGenericArguments().Length != 0;
-        }
-
-        public static string ResolveTypeName(Type type)
-        {
-            return IsGenericType(type) ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
         }
     }
 }
