@@ -8,14 +8,14 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         {
         }
 
-        public override void GetPublicInitCode(CodeBuilder codeBuilder)
+        public override string GetPublicInitCode()
         {
             return string.Format("Guid.Parse(\"{0}\")", Element);
         }
 
         public override string GetPrivateInitCode()
         {
-            return GetPublicInitCode(TODO);
+            return GetPublicInitCode();
         }
 
         public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
@@ -25,7 +25,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public override string AddPublic(string initCode, string parentName, string elementNameInParent)
         {
-            var memberInitCode = GetPublicInitCode(TODO);
+            var memberInitCode = GetPublicInitCode();
             initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, ElementName, memberInitCode);
             return initCode;
         }
