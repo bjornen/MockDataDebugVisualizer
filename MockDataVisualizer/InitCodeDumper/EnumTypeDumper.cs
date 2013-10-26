@@ -8,28 +8,32 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         {
         }
 
-        public override void GetPublicInitCode(CodeBuilder codeBuilder)
+        public string GetPublicInitCode()
         {
             return string.Format("{0}.{1}", ElementTypeName, Convert.ToString(Element));
         }
 
-        public override string GetPrivateInitCode()
+        public string GetPrivateInitCode()
         {
             return string.Format("SetValue({0}, \"{1}\", {2}.{3})", Parent.ElementName, ElementName, ElementTypeName, Convert.ToString(Element));
         }
 
-        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             var memberInitCode = GetPrivateInitCode();
-            initCode = string.Format("{0}{1}{2};", initCode, Environment.NewLine, memberInitCode);
-            return initCode;
+
+            var initCode = string.Format("{0};", memberInitCode);
+            
+            codeBuilder.AddCode(initCode);
         }
 
-        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            var memberInitCode = GetPublicInitCode(TODO);
-            initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, ElementName, memberInitCode);
-            return initCode;
+            var memberInitCode = GetPublicInitCode();
+            
+            var initCode = string.Format("{0}.{1} = {2};", parentName, ElementName, memberInitCode);
+            
+            codeBuilder.AddCode(initCode);
         }
     }
 }

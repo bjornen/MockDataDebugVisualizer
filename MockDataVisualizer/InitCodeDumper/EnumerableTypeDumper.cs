@@ -10,54 +10,73 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
         }
 
-        public override void GetPublicInitCode(CodeBuilder codeBuilder)
+        public void ResolveMembers(CodeBuilder codeBuilder)
         {
-            var genericArguments = Type.GetGenericArguments();
-
-            var initCode = string.Empty;
-
             var enumerableElement = Element as IEnumerable;
-
-            if (genericArguments.Length == 1)
-            {
-                var genericArgument = Type.GetGenericArguments()[0].Name;
-
-                initCode = string.Format("var {0} = new {1}<{2}>();", ElementName, TypeName.Substring(0, TypeName.Length - 2), genericArgument);    
-            }
 
             foreach (var element in enumerableElement)
             {
                 var rep = GetDumper(this, element, element.GetType().Name);
 
-                var elementInitCode = rep.GetPublicInitCode(codeBuilder);
+                var oneLineRep = rep as IOneLineInit;
                 
-                if (element is ValueType)
+                if (oneLineRep != null)
                 {
-                    initCode = string.Format("{0}{1}{2}.Add({3});", initCode, Environment.NewLine, ElementName, elementInitCode);    
+                    var publicInitCode = oneLineRep.PublicOneLineInitCode();
+
+                    var initCode = string.Format("{0}.Add({1});", ElementName, publicInitCode);    
+
+                    codeBuilder.AddCode(initCode);
                 }
                 else
                 {
-                    initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, elementInitCode);
-                    initCode = string.Format("{0}{1}{2}.Add({3});", initCode, Environment.NewLine, ElementName, rep.ElementName);    
+                    rep.AddPublic(codeBuilder, null, null);
+
+                    var initCode = string.Format("{0}.Add({1});", ElementName, rep.ElementName);
+
+                    codeBuilder.AddCode(initCode);
                 }
             }
-
-            return string.Format("{0}{1}", Environment.NewLine, initCode);
         }
 
-        public override string GetPrivateInitCode()
+        private void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
-            throw new NotImplementedException();
+            var genericArguments = Type.GetGenericArguments();
+
+            if (genericArguments.Length == 1)
+            {
+                var genericArgument = Type.GetGenericArguments()[0].Name;
+
+                var initCode = string.Format("var {0} = new {1}<{2}>();", ElementName,
+                    TypeName.Substring(0, TypeName.Length - 2), genericArgument);
+
+                codeBuilder.AddCode(initCode);
+            }
         }
 
-        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCode(TODO), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            ResolveTypeInitilization(codeBuilder);
+
+            ResolveMembers(codeBuilder);
+
+            if (!string.IsNullOrWhiteSpace(parentName))
+            {
+                var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
+
+                codeBuilder.AddCode(initCode);
+            }
         }
 
-        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCode(TODO), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            ResolveTypeInitilization(codeBuilder);
+
+            ResolveMembers(codeBuilder);
+
+            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
+
+            codeBuilder.AddCode(line);
         }
     }
 }

@@ -2,15 +2,33 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class ValueTypeDumper : Dumper
+    public class ValueTypeDumper : Dumper, IOneLineInit
     {
         public ValueTypeDumper(Dumper parent, object element, string name) : base(parent, element, name){}
 
-        public override void GetPublicInitCode(CodeBuilder codeBuilder)
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        {
+            var privateInitCode = PrivateOneLineInitCode();
+            
+            var initCode = string.Format("{0};", privateInitCode);
+            
+            codeBuilder.AddCode(initCode);
+        }
+
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        {
+            var memberInitCode = PublicOneLineInitCode();
+            
+            var initCode = string.Format("{0}.{1} = {2};", parentName, ElementName, memberInitCode);
+            
+            codeBuilder.AddCode(initCode);
+        }
+
+        public string PublicOneLineInitCode()
         {
             var value = string.Format("{0}", Convert.ToString(Element).ToLower());
-            
-            if(value.Contains(","))
+
+            if (value.Contains(","))
                 value = string.Format("{0}", value.Replace(',', '.'));
 
             if (Element is uint)
@@ -18,7 +36,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (Element is ulong)
                 value = string.Format("{0}UL", value);
-            
+
             if (Element is float)
                 value = string.Format("{0}F", value);
 
@@ -31,23 +49,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return value;
         }
 
-        public override string GetPrivateInitCode()
+        public string PrivateOneLineInitCode()
         {
-            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, GetPublicInitCode(TODO));
-        }
-
-        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
-        {
-            var memberInitCode = GetPrivateInitCode();
-            initCode = string.Format("{0}{1}{2};", initCode, Environment.NewLine, memberInitCode);
-            return initCode;
-        }
-
-        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
-        {
-            var memberInitCode = GetPublicInitCode(TODO);
-            initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, ElementName, memberInitCode);
-            return initCode;
+            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, PublicOneLineInitCode());
         }
     }
 }

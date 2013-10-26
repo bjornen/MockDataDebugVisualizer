@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer
 {
     public class CodeBuilder
     {
         private readonly StringBuilder _codeBuilder;
         public List<string> CodeList { get; set; }
-        private int _indentLevel;
+        //private int _indentLevel;
 
         public CodeBuilder()
         {
             _codeBuilder = new StringBuilder();
             CodeList = new List<string>();
-            _indentLevel = 0;
         }
 
         public void AddCode(string code)
@@ -41,10 +39,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             foreach (var line in CodeList)
             {
-                sb.Append(string.Format("{0}{1}", line, Environment.NewLine));
+                sb.Append(string.Format("{0}{1}", line.Trim(), Environment.NewLine));
             }
-
-            return sb.ToString();
+            return sb.ToString().Trim(Environment.NewLine.ToCharArray());
         }
     }
 }

@@ -18,29 +18,55 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             AddFoundElement(element, ElementName);
         }
 
-        public override void GetPublicInitCode(CodeBuilder codeBuilder)
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            //string initCode;
+            ResolveTypeInitilization(codeBuilder);
+
+            ResolveMembers(codeBuilder);
+
+            if (!string.IsNullOrWhiteSpace(parentName))
+            {
+                var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
+                
+                codeBuilder.AddCode(initCode);
+            }
+        }
+
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        {
+            ResolveTypeInitilization(codeBuilder);
+
+            ResolveMembers(codeBuilder);
+
+            var initCode = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
+            
+            codeBuilder.AddCode(initCode);
+        }
+
+        public void ResolveTypeInitilization(CodeBuilder codeBuilder)
+        {
             var typeName = ResolveInitTypeName(Element.GetType());
 
             if (Type.GetConstructor(Type.EmptyTypes) == null)
             {
-                var initCode = string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName);
+                var initCode = string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));",
+                    ElementName, typeName);
                 codeBuilder.AddCode(initCode);
             }
             else
             {
-                var initCode = string.Format("var {0} = new {1}();", ElementName, typeName);    
+                var initCode = string.Format("var {0} = new {1}();", ElementName, typeName);
                 codeBuilder.AddCode(initCode);
             }
-            
+        }
+
+        public void ResolveMembers(CodeBuilder codeBuilder)
+        {
             foreach (var member in Members)
             {
                 var memberValue = GetMemberValue(member);
 
                 if (memberValue == null) continue;
-
-                //var memberInitCode = string.Empty;
 
                 var memberBuilder = new CodeBuilder();
 
@@ -49,11 +75,13 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
                         var memberInitCode = string.Format("{0}.{1} = {2};", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
+                        
                         memberBuilder.AddCode(memberInitCode);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var memberInitCode = string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
+                        
                         memberBuilder.AddCode(memberInitCode);
                     }
                 }
@@ -62,7 +90,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
-                        
+
                         dumper.AddPublic(memberBuilder, ElementName, member.Name);
                     }
                     else if (CanWriteToMember(member))
@@ -75,29 +103,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
                 codeBuilder.AddCode(memberBuilder);
             }
-        }
-
-        public override void GetPrivateInitCode(CodeBuilder codeBuilder)
-        {
-            GetPublicInitCode(codeBuilder);
-        }
-
-        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            GetPublicInitCode(codeBuilder);
-
-            var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
-            
-            codeBuilder.AddCode(initCode);
-        }
-
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            GetPrivateInitCode(codeBuilder);
-
-            var initCode = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
-            
-            codeBuilder.AddCode(initCode);
         }
     }
 }

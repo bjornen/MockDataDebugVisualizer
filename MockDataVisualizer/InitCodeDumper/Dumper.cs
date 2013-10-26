@@ -24,11 +24,8 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         internal IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } }
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        public abstract string GetPublicInitCode();
-        public abstract string GetPrivateInitCode();
-
-        public abstract string AddPublic(string initCode, string parentName, string elementNameInParent);
-        public abstract string AddPrivate(string initCode, string parentName, string elementNameInParent);
+        public abstract void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent);
+        public abstract void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent);
         
         protected Dumper(Dumper parent, object element, string name)
         {
@@ -43,14 +40,15 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             var dumper = InitDumper(o);
 
-            var initCode = dumper.GetPublicInitCode();
+            var codeBuilder = new CodeBuilder();
+
+            dumper.AddPublic(codeBuilder, null, null);
 
             var nameForMethod = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(dumper.ElementName);
 
-            var completeCreateMethod = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.ElementTypeName, nameForMethod, Environment.NewLine, initCode, Environment.NewLine, dumper.ElementName, Environment.NewLine);
+            var completeCreateMethod = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.ElementTypeName, nameForMethod, Environment.NewLine, codeBuilder, Environment.NewLine, dumper.ElementName, Environment.NewLine);
 
             return completeCreateMethod;
-
         }
 
         public static string DumpInitlizationCode(object o)
@@ -59,7 +57,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             var dumper = InitDumper(o);
 
-            return string.Format("{0}", dumper.GetPublicInitCode());
+            var codeBuilder = new CodeBuilder();
+
+            dumper.AddPublic(codeBuilder, null, null);
+
+            return string.Format("{0}", codeBuilder);
         }
 
         private static Dumper InitDumper(object o)
