@@ -13,17 +13,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
         }
 
-        public override string GetPublicInitCode()
+        public override void GetPublicInitCode(CodeBuilder codeBuilder)
         {
             var genericArguments = Type.GetGenericArguments();
 
-            var initCode = string.Empty;
+            //var initCode = string.Empty;
 
             var enumerableElement = Element as IEnumerable;
 
             if (genericArguments.Length == 2)
             {
-                initCode = string.Format("var {0} = new {1}<{2}, {3}>();", ElementName, TypeName.Substring(0, TypeName.Length - 2), Type.GetGenericArguments()[0].Name, Type.GetGenericArguments()[1].Name);
+                var initCode = string.Format("var {0} = new {1}<{2}, {3}>();", ElementName, TypeName.Substring(0, TypeName.Length - 2), Type.GetGenericArguments()[0].Name, Type.GetGenericArguments()[1].Name);
+                codeBuilder.AddCode(initCode);
             }
 
             foreach (var element in enumerableElement)
@@ -41,48 +42,60 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 
                 if (!(keyRep is ValueTypeDumper) && !(keyRep is StringTypeDumper))
                 {
-                    initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, keyInitCode);
+                    //initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, keyInitCode);
+                    codeBuilder.AddCode(keyInitCode);
                 }
                 if (!(valueRep is ValueTypeDumper) && !(valueRep is StringTypeDumper))
                 {
-                    initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, valueInitCode);
+                    //initCode = string.Format("{0}{1}{2}", initCode, Environment.NewLine, valueInitCode);
+                    codeBuilder.AddCode(valueInitCode);
                 }
-                
+
+                string line;
+
                 if (keyRep is ValueTypeDumper || keyRep is StringTypeDumper)
                 {
-                    initCode = string.Format("{0}{1}{2}.Add({3},", initCode, Environment.NewLine, ElementName, keyInitCode);
+                    line = string.Format("{0}.Add({1},", ElementName, keyInitCode);
                 }
                 else
                 {
-                    initCode = string.Format("{0}{1}{2}.Add({3},", initCode, Environment.NewLine, ElementName, keyRep.ElementName);
+                    line = string.Format("{0}.Add({1},", ElementName, keyRep.ElementName);
                 }
 
                 if (valueRep is ValueTypeDumper || valueRep is StringTypeDumper)
                 {
-                    initCode = string.Format("{0} {1});", initCode, valueInitCode);
+                    line = string.Format("{0} {1});", line, valueInitCode);
                 }
                 else
                 {
-                    initCode = string.Format("{0} {1});", initCode, valueRep.ElementName);
+                    line = string.Format("{0} {1});", line, valueRep.ElementName);
                 }
+
+                codeBuilder.AddCode(line);
             }
 
-            return string.Format("{0}{1}", Environment.NewLine, initCode);
+            //return string.Format("{0}{1}", Environment.NewLine, initCode);
         }
 
-        public override string GetPrivateInitCode()
+        public override void GetPrivateInitCode(CodeBuilder codeBuilder)
         {
             throw new NotImplementedException();
         }
 
-        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            GetPublicInitCode(codeBuilder);
+
+            var line = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
+
+            codeBuilder.AddCode(line);
         }
 
-        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
+
+            codeBuilder.AddCode(line);
         }
     }
 }

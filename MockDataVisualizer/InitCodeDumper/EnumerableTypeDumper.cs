@@ -10,7 +10,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
         }
 
-        public override string GetPublicInitCode()
+        public override void GetPublicInitCode(CodeBuilder codeBuilder)
         {
             var genericArguments = Type.GetGenericArguments();
 
@@ -29,7 +29,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 var rep = GetDumper(this, element, element.GetType().Name);
 
-                var elementInitCode = rep.GetPublicInitCode();
+                var elementInitCode = rep.GetPublicInitCode(codeBuilder);
                 
                 if (element is ValueType)
                 {
@@ -52,12 +52,12 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public override string AddPublic(string initCode, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            return string.Format("{0}{1}{2}{3}{4}.{5} = {6};", initCode, Environment.NewLine, GetPublicInitCode(TODO), Environment.NewLine, parentName, elementNameInParent, ElementName);
         }
 
         public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
         {
-            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCode(), Environment.NewLine, parentName, elementNameInParent, ElementName);
+            return string.Format("{0}{1}{2}{3}SetValue({4}, \"{5}\", {6});", initCode, Environment.NewLine, GetPublicInitCode(TODO), Environment.NewLine, parentName, elementNameInParent, ElementName);
         }
     }
 }
