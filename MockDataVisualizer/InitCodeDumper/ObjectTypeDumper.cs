@@ -68,21 +68,19 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
                 if (memberValue == null) continue;
 
-                var memberBuilder = new CodeBuilder();
-
                 if (IsElementAlreadyTouched(memberValue))
                 {
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
                         var memberInitCode = string.Format("{0}.{1} = {2};", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
-                        
-                        memberBuilder.AddCode(memberInitCode);
+
+                        codeBuilder.AddCode(memberInitCode);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var memberInitCode = string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
-                        
-                        memberBuilder.AddCode(memberInitCode);
+
+                        codeBuilder.AddCode(memberInitCode);
                     }
                 }
                 else
@@ -91,17 +89,15 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPublic(memberBuilder, ElementName, member.Name);
+                        dumper.AddPublic(codeBuilder, ElementName, member.Name);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPrivate(memberBuilder, ElementName, member.Name);
+                        dumper.AddPrivate(codeBuilder, ElementName, member.Name);
                     }
                 }
-
-                codeBuilder.AddCode(memberBuilder);
             }
         }
     }
