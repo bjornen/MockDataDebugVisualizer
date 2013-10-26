@@ -6,7 +6,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
     {
         public ValueTypeDumper(Dumper parent, object element, string name) : base(parent, element, name){}
 
-        public override string GetPublicInitCode()
+        public override void GetPublicInitCode(CodeBuilder codeBuilder)
         {
             var value = string.Format("{0}", Convert.ToString(Element).ToLower());
             
@@ -33,7 +33,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public override string GetPrivateInitCode()
         {
-            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, GetPublicInitCode());
+            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, GetPublicInitCode(TODO));
         }
 
         public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
@@ -45,7 +45,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public override string AddPublic(string initCode, string parentName, string elementNameInParent)
         {
-            var memberInitCode = GetPublicInitCode();
+            var memberInitCode = GetPublicInitCode(TODO);
             initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, ElementName, memberInitCode);
             return initCode;
         }

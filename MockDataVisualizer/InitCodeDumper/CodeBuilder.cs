@@ -8,27 +8,43 @@ namespace MockDataDebugVisualizer.InitCodeDumper
     public class CodeBuilder
     {
         private readonly StringBuilder _codeBuilder;
-        private readonly List<string> _codeInitList;
+        public List<string> CodeList { get; set; }
+        private int _indentLevel;
 
         public CodeBuilder()
         {
             _codeBuilder = new StringBuilder();
-            _codeInitList = new List<string>();
+            CodeList = new List<string>();
+            _indentLevel = 0;
         }
 
         public void AddCode(string code)
         {
-            _codeInitList.Add(code);
+            //var line = string.Format("{0}{1}", Indentation(indentLevel), code);
+            
+            CodeList.Add(code);
         }
 
-        public void AddCode(List<string> codeInitList)
+        public void AddCode(CodeBuilder builder)
         {
-            _codeInitList.AddRange(codeInitList);
+            CodeList.AddRange(builder.CodeList);
         }
 
         public string Indentation(int level)
         {
             return new string('\t', level);
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var line in CodeList)
+            {
+                sb.Append(string.Format("{0}{1}", line, Environment.NewLine));
+            }
+
+            return sb.ToString();
         }
     }
 }
