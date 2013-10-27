@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System.Windows.Forms;
-using MockDataDebugVisualizer.DebugVisualizers.InitCodeMethod;
 
 namespace MockDataDebugVisualizer.DebugVisualizers
 {
@@ -29,13 +28,6 @@ namespace MockDataDebugVisualizer.DebugVisualizers
             Clipboard.SetText(dump);
 
             MessageBox.Show(message);
-        }
-
-        public static void TestShowVisualizer(object objectToVisualize)
-        {
-            var visualizerHost = new VisualizerDevelopmentHost(objectToVisualize, typeof(InitCodeMethodVisualizer), typeof(InitCodeMethod.InitCodeMethodObjectSource));
-            
-            visualizerHost.ShowVisualizer();
         }
     }
 }

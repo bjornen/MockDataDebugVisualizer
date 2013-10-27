@@ -7,17 +7,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ObjectTypeDumper : AbstractComplexTypeDumper
     {
+        private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } } // use .OrderBy(x => x.Name); to make unit tests work
+        private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
+
         internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
-            var typeName = name;
-
-            if (IsGenericType(element.GetType()))
-            {
-                typeName = ResolveTypeName(element.GetType());
-            }
-
-            ElementName = string.Format("{0}_{1}", typeName, ObjectCounter++);
-
             AddFoundElement(element, ElementName);
         }
 
@@ -27,13 +21,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
             if (Element.GetType().GetConstructor(Type.EmptyTypes) == null)
             {
-                var initCode = string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName);
-                codeBuilder.AddCode(initCode);
+                codeBuilder.AddCode(string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName));
             }
             else
             {
-                var initCode = string.Format("var {0} = new {1}();", ElementName, typeName);
-                codeBuilder.AddCode(initCode);
+                codeBuilder.AddCode(string.Format("var {0} = new {1}();", ElementName, typeName));
             }
         }
 
@@ -49,15 +41,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                 {
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
-                        var memberInitCode = string.Format("{0}.{1} = {2};", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
-
-                        codeBuilder.AddCode(memberInitCode);
+                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue)));
                     }
                     else if (CanWriteToMember(member))
                     {
-                        var memberInitCode = string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue));
-
-                        codeBuilder.AddCode(memberInitCode);
+                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue)));
                     }
                 }
                 else
@@ -79,9 +67,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                             value = dumper.ElementName;
                         }
 
-                        var initCode = string.Format("{0}.{1} = {2};", ElementName, member.Name, value);
-
-                        codeBuilder.AddCode(initCode);
+                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, value));
                     }
                     else if (CanWriteToMember(member))
                     {
@@ -100,31 +86,20 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                             value = dumper.ElementName;
                         }
 
-                        var line = string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, value);
-
-                        codeBuilder.AddCode(line);
+                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, value));
                     }
                 }
             }
         }
 
-
-
-
-
-
-        internal IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } } // use .OrderBy(x => x.Name); to make unit tests work
-        private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
-
-
-        internal bool IsElementAlreadyTouched(object element)
+        private static bool IsElementAlreadyTouched(object element)
         {
             var hash = element.GetHashCode();
 
             return _foundElements.Any(t => _foundElements.ContainsKey(hash));
         }
 
-        internal string GetNameOfAlreadyTouchedElement(object element)
+        private static string GetNameOfAlreadyTouchedElement(object element)
         {
             var hash = element.GetHashCode();
 
@@ -136,17 +111,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             return null;
         }
 
-        internal Type GetMemberType(MemberInfo member)
-        {
-            var fieldInfo = member as FieldInfo;
-            var propertyInfo = member as PropertyInfo;
-
-            if (fieldInfo == null && propertyInfo == null) return null;
-
-            return fieldInfo != null ? fieldInfo.FieldType : propertyInfo.PropertyType;
-        }
-
-        internal object GetMemberValue(MemberInfo member)
+        private object GetMemberValue(MemberInfo member)
         {
             if (member == null) return null;
 
@@ -160,7 +125,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             return fieldInfo != null ? fieldInfo.GetValue(Element) : propertyInfo.GetValue(Element, null);
         }
 
-        internal void AddFoundElement(object element, string elementName)
+        private static void AddFoundElement(object element, string elementName)
         {
             var hash = element.GetHashCode();
 
@@ -170,12 +135,12 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             }
         }
 
-        internal bool IsMemberPublic(MemberInfo member)
+        private bool IsMemberPublic(MemberInfo member)
         {
             return PublicMembers.Contains(member);
         }
 
-        internal bool CanWriteToMember(MemberInfo member)
+        private static bool CanWriteToMember(MemberInfo member)
         {
             var propertyInfo = member as PropertyInfo;
 
@@ -187,7 +152,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             return member is FieldInfo;
         }
 
-        internal bool CanWriteToMemberWithSetter(MemberInfo member)
+        private static bool CanWriteToMemberWithSetter(MemberInfo member)
         {
             var propertyInfo = member as PropertyInfo;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
 using MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers;
 
@@ -25,6 +24,15 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         internal abstract void AddPublicMember(CodeBuilder codeBuilder);
         internal abstract void AddPrivateMember(CodeBuilder codeBuilder);
+
+        public static string DumpInitilizationCodeMethodAndSetValueMethod(object o)
+        {
+            var createMethod = DumpInitilizationCodeMethod(o);
+
+            const string setValueMethod = "public static void SetValue<T>(object obj, string propName, T val) { if (obj == null) throw new ArgumentNullException(\"obj\"); var t = obj.GetType(); if (t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) != null) { t.InvokeMember(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, null, obj, new object[] { val }); } else { FieldInfo fi = null; while (fi == null && t != null) { fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); t = t.BaseType; } if (fi == null) throw new ArgumentOutOfRangeException(\"propName\", string.Format(\"Field {0} was not found in Type {1}\", propName, obj.GetType().FullName)); fi.SetValue(obj, val); } }";
+
+            return string.Format("{0}{1}{2}", createMethod, Environment.NewLine, setValueMethod);
+        }
         
         public static string DumpInitilizationCodeMethod(object o)
         {
@@ -52,9 +60,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 code = oneLineDumper.PublicOneLineInitCode();
             }
 
-            var nameForMethod = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(dumper.ElementName);
-
-            var completeCreateMethod = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.Element.GetType().Name, nameForMethod, Environment.NewLine, code, Environment.NewLine, dumper.ElementName, Environment.NewLine);
+            var completeCreateMethod = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.Element.GetType().Name, dumper.ElementName, Environment.NewLine, code, Environment.NewLine, dumper.ElementName, Environment.NewLine);
 
             return completeCreateMethod;
         }

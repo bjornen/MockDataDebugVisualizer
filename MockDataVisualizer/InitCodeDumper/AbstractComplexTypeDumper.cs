@@ -1,9 +1,20 @@
 ﻿
+
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public abstract class AbstractComplexTypeDumper : DumperBase
     {
-        protected AbstractComplexTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){ }
+        protected AbstractComplexTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
+        {
+            var typeName = name;
+
+            if (IsGenericType(element.GetType()))
+            {
+                typeName = ResolveTypeName(element.GetType());
+            }
+
+            ElementName = string.Format("{0}_{1}", LowerCaseFirst(typeName), ObjectCounter++);
+        }
 
         public abstract void ResolveTypeInitilization(CodeBuilder codeBuilder);
         public abstract void ResolveMembers(CodeBuilder codeBuilder);
@@ -20,6 +31,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
+        }
+
+        private static string LowerCaseFirst(string variableName)
+        {
+            return string.IsNullOrEmpty(variableName) ? string.Empty : char.ToLower(variableName[0]) + variableName.Substring(1);
         }
     }
 }

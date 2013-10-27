@@ -4,10 +4,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class DictionaryTypeDumper : AbstractComplexTypeDumper
     {
-        public DictionaryTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
-        {
-            ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
-        }
+        public DictionaryTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {

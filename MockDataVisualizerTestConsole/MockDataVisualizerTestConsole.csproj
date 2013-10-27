@@ -54,7 +54,6 @@
     <Compile Include="ReflectionExtentions.cs" />
     <Compile Include="Tests\ObjectCreateCodeDumperTests.cs" />
     <Compile Include="Tests\TestObjects\Bar.cs" />
-    <Compile Include="Tests\TestObjects\Customer\MasterCustomer.cs" />
     <Compile Include="Tests\TestObjects\EnumObject.cs" />
     <Compile Include="Tests\TestObjects\Foo.cs" />
     <Compile Include="Tests\TestObjects\IServicedEntity.cs" />

@@ -9,8 +9,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
         public ArrayTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
-            ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
-            
             _arrayLength = 0;
         }
 
