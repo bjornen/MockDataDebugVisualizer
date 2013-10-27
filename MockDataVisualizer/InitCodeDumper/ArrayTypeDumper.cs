@@ -16,21 +16,17 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         public void ResolveMembers(CodeBuilder codeBuilder)
         {
-            var enumerableElement = Element as IEnumerable;
+            var elementList = Element as IList;
 
-            var length = 0;
-
-            foreach (var element in enumerableElement)
+            for (var i = 0; i < elementList.Count; i++)
             {
-                length++;
-
-                var dumper = GetDumper(this, element, element.GetType().Name);
+                var dumper = GetDumper(this, elementList[i], elementList[i].GetType().Name);
 
                 var oneLineDumper = dumper as IOneLineInit;
 
                 if (oneLineDumper != null)
                 {
-                    var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, length - 1, oneLineDumper.PublicOneLineInitCode());
+                    var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, i, oneLineDumper.PublicOneLineInitCode());
 
                     codeBuilder.AddCode(memberInitCode);
                 }
@@ -38,14 +34,14 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 {
                     dumper.AddPublic(codeBuilder, null, null);
 
-                    var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, length - 1, dumper.ElementName);
+                    var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, i, dumper.ElementName);
 
                     codeBuilder.AddCode(memberInitCode);
                 }
             }
         }
 
-        private void ResolveTypeInitilizationCode(CodeBuilder codeBuilder)
+        public void ResolveTypeInitilizationCode(CodeBuilder codeBuilder)
         {
             var genericArguments = Type.GetGenericArguments();
 
@@ -85,9 +81,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         private void SetArrayLength()
         {
-            var enumerable = Element as Array;
-
-            _arrayLength = enumerable.Length;
+            _arrayLength = (Element as Array).Length;
         }
     }
 }
