@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 {
     public class ObjectTypeDumper : AbstractComplexTypeDumper
     {
@@ -19,28 +19,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = string.Format("{0}_{1}", typeName, ObjectCounter++);
 
             AddFoundElement(element, ElementName);
-        }
-
-        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
-                
-            codeBuilder.AddCode(initCode);
-        }
-
-        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var initCode = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
-            
-            codeBuilder.AddCode(initCode);
         }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
@@ -88,18 +66,47 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPublicMemberAndAssignToParent(codeBuilder, ElementName, member.Name);
+                        dumper.AddPublicMember(codeBuilder);
+
+                        string value;
+
+                        if (dumper is AbstractOneLineInitDumper)
+                        {
+                            value = codeBuilder.PopCode();
+                        }
+                        else
+                        {
+                            value = dumper.ElementName;
+                        }
+
+                        var initCode = string.Format("{0}.{1} = {2};", ElementName, member.Name, value);
+
+                        codeBuilder.AddCode(initCode);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPrivateMemberAndAssignToParrent(codeBuilder, ElementName, member.Name);
+                        dumper.AddPublicMember(codeBuilder);
+
+                        string value;
+
+                        if (dumper is AbstractOneLineInitDumper)
+                        {
+                            value = codeBuilder.PopCode();
+                        }
+                        else
+                        {
+                            value = dumper.ElementName;
+                        }
+
+                        var line = string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, value);
+
+                        codeBuilder.AddCode(line);
                     }
                 }
             }
         }
-
 
 
 

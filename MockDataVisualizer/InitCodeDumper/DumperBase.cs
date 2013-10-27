@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using MockDataDebugVisualizer.InitCodeDumper.Dumpers;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public abstract class DumperBase : IDumper
+    public abstract class DumperBase
     {
         internal readonly object Element;
         internal readonly DumperBase Parent;
@@ -21,8 +22,8 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ElementName = name;
         }
 
-        public abstract void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent);
-        public abstract void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent);
+        internal abstract void AddPublicMember(CodeBuilder codeBuilder);
+        internal abstract void AddPrivateMember(CodeBuilder codeBuilder);
         
         public static string DumpInitilizationCodeMethod(object o)
         {

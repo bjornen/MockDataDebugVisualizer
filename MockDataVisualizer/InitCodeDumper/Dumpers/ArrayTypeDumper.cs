@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 {
     public class ArrayTypeDumper : AbstractComplexTypeDumper
     {
@@ -22,7 +22,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 var dumper = GetDumper(this, elementList[i], elementList[i].GetType().Name);
 
-                var oneLineDumper = dumper as IOneLineInitDumper;
+                var oneLineDumper = dumper as AbstractOneLineInitDumper;
 
                 if (oneLineDumper != null)
                 {
@@ -58,45 +58,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             }
         }
 
-        public override void AddPublicMemberAndAssignToParent(CodeBuilder  codeBuilder, string parentName, string elementNameInParent)
-        {
-            SetArrayLength();
-
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var line = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
-
-            codeBuilder.AddCode(line);
-        }
-
-        public override void AddPublicMember(CodeBuilder codeBuilder)
+        internal override void AddPublicMember(CodeBuilder codeBuilder)
         {
             SetArrayLength();
 
             base.AddPublicMember(codeBuilder);
         }
 
-        public override void AddPrivateMember(CodeBuilder codeBuilder)
+        internal override void AddPrivateMember(CodeBuilder codeBuilder)
         {
             SetArrayLength();
 
             base.AddPublicMember(codeBuilder);
-        }
-
-
-        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            SetArrayLength();
-
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
-
-            codeBuilder.AddCode(line);
         }
 
         private void SetArrayLength()

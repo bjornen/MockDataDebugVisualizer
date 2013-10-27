@@ -1,30 +1,12 @@
 ﻿using System;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 {
-    public class ValueTypeDumper : DumperBase, IOneLineInitDumper
+    public class ValueTypeDumper : AbstractOneLineInitDumper
     {
         public ValueTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){}
 
-        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            var privateInitCode = PrivateOneLineInitCode();
-            
-            var initCode = string.Format("{0};", privateInitCode);
-            
-            codeBuilder.AddCode(initCode);
-        }
-
-        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            var memberInitCode = PublicOneLineInitCode();
-            
-            var initCode = string.Format("{0}.{1} = {2};", parentName, ElementName, memberInitCode);
-            
-            codeBuilder.AddCode(initCode);
-        }
-
-        public string PublicOneLineInitCode()
+        public override string PublicOneLineInitCode()
         {
             var value = string.Format("{0}", Convert.ToString(Element).ToLower());
 
@@ -49,7 +31,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return value;
         }
 
-        public string PrivateOneLineInitCode()
+        public override string PrivateOneLineInitCode()
         {
             return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, PublicOneLineInitCode());
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 {
     public class DictionaryTypeDumper : AbstractComplexTypeDumper
     {
@@ -23,8 +23,8 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 var keyRep = GetDumper(this, keyValue.Key, keyName);
                 var valueRep = GetDumper(this, keyValue.Value, valueName);
 
-                var oneLineKeyDumper = keyRep as IOneLineInitDumper;
-                var oneLineValueDumper = valueRep as IOneLineInitDumper;
+                var oneLineKeyDumper = keyRep as AbstractOneLineInitDumper;
+                var oneLineValueDumper = valueRep as AbstractOneLineInitDumper;
                 
                 if (oneLineKeyDumper == null)
                 {
@@ -73,31 +73,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
                 codeBuilder.AddCode(initCode);
             }
-        }
-
-        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            if (!string.IsNullOrWhiteSpace(parentName))
-            {
-                var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
-
-                codeBuilder.AddCode(initCode);
-            }
-        }
-
-        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
-
-            codeBuilder.AddCode(line);
         }
     }
 }

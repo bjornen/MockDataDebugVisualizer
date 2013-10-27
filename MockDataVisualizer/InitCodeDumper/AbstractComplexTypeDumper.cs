@@ -8,14 +8,14 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         public abstract void ResolveTypeInitilization(CodeBuilder codeBuilder);
         public abstract void ResolveMembers(CodeBuilder codeBuilder);
 
-        public virtual void AddPublicMember(CodeBuilder codeBuilder)
+        internal override void AddPublicMember(CodeBuilder codeBuilder)
         {
             ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
         }
 
-        public virtual void AddPrivateMember(CodeBuilder codeBuilder)
+        internal override void AddPrivateMember(CodeBuilder codeBuilder)
         {
             ResolveTypeInitilization(codeBuilder);
 

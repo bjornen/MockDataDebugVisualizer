@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace MockDataDebugVisualizer.InitCodeDumper
+namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 {
     public class EnumerableTypeDumper : AbstractComplexTypeDumper
     {
@@ -17,7 +17,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 var rep = GetDumper(this, element, element.GetType().Name);
 
-                var oneLineRep = rep as IOneLineInitDumper;
+                var oneLineRep = rep as AbstractOneLineInitDumper;
                 
                 if (oneLineRep != null)
                 {
@@ -56,28 +56,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
                 codeBuilder.AddCode(initCode);
             }
-        }
-
-        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
-
-            codeBuilder.AddCode(initCode);
-        }
-
-        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
-
-            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, ElementName);
-
-            codeBuilder.AddCode(line);
         }
     }
 }

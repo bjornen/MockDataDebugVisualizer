@@ -2,25 +2,32 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MockDataDebugVisualizer
+namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public class CodeBuilder
     {
-        private readonly StringBuilder _codeBuilder;
-        public List<string> CodeList { get; set; }
-        //private int _indentLevel;
+        private List<string> CodeList { get; set; }
+        private Stack<string> CodeStack { get; set; } 
 
         public CodeBuilder()
         {
-            _codeBuilder = new StringBuilder();
             CodeList = new List<string>();
+            CodeStack = new Stack<string>();
         }
 
         public void AddCode(string code)
         {
-            //var line = string.Format("{0}{1}", Indentation(indentLevel), code);
-            
             CodeList.Add(code);
+        }
+
+        public void PushCode(string code)
+        {
+            CodeStack.Push(code);
+        }
+
+        public string PopCode()
+        {
+            return CodeStack.Pop();
         }
 
         public void AddCode(CodeBuilder builder)
