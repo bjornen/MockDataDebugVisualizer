@@ -5,11 +5,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ArrayTypeDumper : AbstractComplexTypeDumper
     {
-        private int _arrayLength;
+        private readonly int _arrayLength;
 
         public ArrayTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
-            _arrayLength = 0;
+            _arrayLength = (Element as Array).Length;
         }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
@@ -25,6 +25,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                 codeBuilder.AddCode(initCode);
             }
         }
+
         public override void ResolveMembers(CodeBuilder codeBuilder)
         {
             var elementList = Element as IList;
@@ -53,25 +54,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                     codeBuilder.AddCode(memberInitCode);
                 }
             }
-        }
-
-        internal override void AddPublicMember(CodeBuilder codeBuilder)
-        {
-            SetArrayLength();
-
-            base.AddPublicMember(codeBuilder);
-        }
-
-        internal override void AddPrivateMember(CodeBuilder codeBuilder)
-        {
-            SetArrayLength();
-
-            base.AddPublicMember(codeBuilder);
-        }
-
-        private void SetArrayLength()
-        {
-            _arrayLength = (Element as Array).Length;
         }
     }
 }

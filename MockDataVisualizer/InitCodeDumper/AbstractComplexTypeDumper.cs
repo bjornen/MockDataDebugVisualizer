@@ -1,5 +1,4 @@
 ﻿
-
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public abstract class AbstractComplexTypeDumper : DumperBase

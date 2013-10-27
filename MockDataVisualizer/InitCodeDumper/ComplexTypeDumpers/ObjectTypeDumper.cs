@@ -50,42 +50,27 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                 }
                 else
                 {
+                    var dumper = GetDumper(this, memberValue, member.Name);
+
+                    dumper.AddPublicMember(codeBuilder);
+
+                    string value;
+
+                    if (dumper is AbstractOneLineInitDumper)
+                    {
+                        value = codeBuilder.PopCode();
+                    }
+                    else
+                    {
+                        value = dumper.ElementName;
+                    }
+
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
-                        var dumper = GetDumper(this, memberValue, member.Name);
-
-                        dumper.AddPublicMember(codeBuilder);
-
-                        string value;
-
-                        if (dumper is AbstractOneLineInitDumper)
-                        {
-                            value = codeBuilder.PopCode();
-                        }
-                        else
-                        {
-                            value = dumper.ElementName;
-                        }
-
                         codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, value));
                     }
                     else if (CanWriteToMember(member))
                     {
-                        var dumper = GetDumper(this, memberValue, member.Name);
-
-                        dumper.AddPublicMember(codeBuilder);
-
-                        string value;
-
-                        if (dumper is AbstractOneLineInitDumper)
-                        {
-                            value = codeBuilder.PopCode();
-                        }
-                        else
-                        {
-                            value = dumper.ElementName;
-                        }
-
                         codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, value));
                     }
                 }
