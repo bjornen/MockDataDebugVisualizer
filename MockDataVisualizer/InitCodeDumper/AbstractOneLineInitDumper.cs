@@ -14,12 +14,12 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         internal override void AddPublicMember(CodeBuilder codeBuilder)
         {
-            codeBuilder.PushCode(PublicOneLineInitCode());
+            codeBuilder.PushInitValue(PublicOneLineInitCode());
         }
 
         internal override void AddPrivateMember(CodeBuilder codeBuilder)
         {
-            codeBuilder.PushCode(PrivateOneLineInitCode());
+            codeBuilder.PushInitValue(PrivateOneLineInitCode());
         }
     }
 }

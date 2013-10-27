@@ -30,21 +30,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 var dumper = GetDumper(this, element, element.GetType().Name);
 
-                var oneLineDumper = dumper as AbstractOneLineInitDumper;
-                
-                if (oneLineDumper != null)
-                {
-                    codeBuilder.AddCode(string.Format("{0}.Add({1});", ElementName, oneLineDumper.PublicOneLineInitCode()));
-                }
+                dumper.AddPublicMember(codeBuilder);
 
-                var complexTypeDumper = dumper as AbstractComplexTypeDumper;
-                
-                if(complexTypeDumper != null)
-                {
-                    complexTypeDumper.AddPublicMember(codeBuilder);
-
-                    codeBuilder.AddCode(string.Format("{0}.Add({1});", ElementName, dumper.ElementName));
-                }
+                codeBuilder.AddCode(string.Format("{0}.Add({1});", ElementName, codeBuilder.PopInitValue()));
             }
         }
     }

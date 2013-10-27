@@ -23,13 +23,13 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
+
+            codeBuilder.PushInitValue(ElementName);
         }
 
         internal override void AddPrivateMember(CodeBuilder codeBuilder)
         {
-            ResolveTypeInitilization(codeBuilder);
-
-            ResolveMembers(codeBuilder);
+            AddPublicMember(codeBuilder);
         }
 
         private static string LowerCaseFirst(string variableName)

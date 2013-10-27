@@ -33,40 +33,16 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                 var keyName = string.Format("{0}_{1}", keyValue.Key.GetType().Name, ObjectCounter++);
                 var valueName = string.Format("{0}_{1}", keyValue.Value.GetType().Name, ObjectCounter++);
                 
-                var keyRep = GetDumper(this, keyValue.Key, keyName);
-                var valueRep = GetDumper(this, keyValue.Value, valueName);
+                var keyDumper = GetDumper(this, keyValue.Key, keyName);
+                var valueDumper = GetDumper(this, keyValue.Value, valueName);
 
-                var oneLineKeyDumper = keyRep as AbstractOneLineInitDumper;
-                var oneLineValueDumper = valueRep as AbstractOneLineInitDumper;
-                
-                if (oneLineKeyDumper == null)
-                {
-                    keyRep.AddPublicMember(codeBuilder);
-                }
-                if (oneLineValueDumper == null)
-                {
-                    valueRep.AddPublicMember(codeBuilder);
-                }
+                keyDumper.AddPublicMember(codeBuilder);
 
-                string line;
+                var line = string.Format("{0}.Add({1},", ElementName, codeBuilder.PopInitValue());
 
-                if (oneLineKeyDumper != null)
-                {
-                    line = string.Format("{0}.Add({1},", ElementName, oneLineKeyDumper.PublicOneLineInitCode());
-                }
-                else
-                {
-                    line = string.Format("{0}.Add({1},", ElementName, keyRep.ElementName);
-                }
-
-                if (oneLineValueDumper != null)
-                {
-                    line = string.Format("{0} {1});", line, oneLineValueDumper.PublicOneLineInitCode());
-                }
-                else
-                {
-                    line = string.Format("{0} {1});", line, valueRep.ElementName);
-                }
+                valueDumper.AddPublicMember(codeBuilder);
+   
+                line = string.Format("{0} {1});", line, codeBuilder.PopInitValue());
 
                 codeBuilder.AddCode(line);
             }

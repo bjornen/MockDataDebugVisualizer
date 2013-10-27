@@ -54,24 +54,13 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                     dumper.AddPublicMember(codeBuilder);
 
-                    string value;
-
-                    if (dumper is AbstractOneLineInitDumper)
-                    {
-                        value = codeBuilder.PopCode();
-                    }
-                    else
-                    {
-                        value = dumper.ElementName;
-                    }
-
                     if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                     {
-                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, value));
+                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
                     }
                     else if (CanWriteToMember(member))
                     {
-                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, value));
+                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
                     }
                 }
             }
