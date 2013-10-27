@@ -1,4 +1,4 @@
-﻿namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+﻿namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
     public class GuidTypeDumper : AbstractOneLineInitDumper
     {
@@ -7,11 +7,6 @@
         public override string PublicOneLineInitCode()
         {
             return string.Format("Guid.Parse(\"{0}\")", Element);
-        }
-
-        public override string PrivateOneLineInitCode()
-        {
-            return PublicOneLineInitCode();
         }
     }
 }

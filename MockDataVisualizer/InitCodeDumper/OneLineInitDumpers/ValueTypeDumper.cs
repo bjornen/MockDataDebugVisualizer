@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
     public class ValueTypeDumper : AbstractOneLineInitDumper
     {
@@ -29,11 +29,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
                 value = string.Format("{0}M", value);
 
             return value;
-        }
-
-        public override string PrivateOneLineInitCode()
-        {
-            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, PublicOneLineInitCode());
         }
     }
 }

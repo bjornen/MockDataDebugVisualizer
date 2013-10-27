@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using MockDataDebugVisualizer.InitCodeDumper.Dumpers;
+using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
+using MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
@@ -44,7 +45,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 code = codeBuilder.ToString();
             }
 
-            var oneLineDumper = dumper as IOneLineInitDumper;
+            var oneLineDumper = dumper as AbstractOneLineInitDumper;
 
             if (oneLineDumper != null)
             {
@@ -77,7 +78,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 code = codeBuilder.ToString();
             }
 
-            var oneLineDumper = dumper as IOneLineInitDumper;
+            var oneLineDumper = dumper as AbstractOneLineInitDumper;
 
             if (oneLineDumper != null)
             {

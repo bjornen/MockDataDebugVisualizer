@@ -1,5 +1,5 @@
 ﻿
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
     public class StringTypeDumper : AbstractOneLineInitDumper
     {

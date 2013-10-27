@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using MockDataDebugVisualizer.InitCodeDumper;
-using MockDataDebugVisualizer.InitCodeDumper.Dumpers;
+using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
 using MockDataVisualizerTestConsole.Tests.TestObjects;
 using MockDataVisualizerTestConsole.Tests.TestObjects.Customer;
 using Xunit;

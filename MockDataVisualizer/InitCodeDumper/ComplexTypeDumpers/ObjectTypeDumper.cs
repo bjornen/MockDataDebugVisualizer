@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ObjectTypeDumper : AbstractComplexTypeDumper
     {

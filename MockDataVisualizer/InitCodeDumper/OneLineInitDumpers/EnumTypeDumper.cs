@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
     public class EnumTypeDumper : AbstractOneLineInitDumper
     {

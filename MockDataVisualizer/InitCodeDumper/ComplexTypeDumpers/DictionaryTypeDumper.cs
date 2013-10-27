@@ -1,12 +1,28 @@
 ﻿using System.Collections;
 
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class DictionaryTypeDumper : AbstractComplexTypeDumper
     {
         public DictionaryTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
+        }
+
+        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
+        {
+            var genericArguments = Element.GetType().GetGenericArguments();
+
+            var typeName = Element.GetType().Name;
+
+            if (genericArguments.Length == 2)
+            {
+                var initCode = string.Format("var {0} = new {1}<{2}, {3}>();", ElementName,
+                    typeName.Substring(0, typeName.Length - 2), Element.GetType().GetGenericArguments()[0].Name,
+                    Element.GetType().GetGenericArguments()[1].Name);
+
+                codeBuilder.AddCode(initCode);
+            }
         }
 
         public override void ResolveMembers(CodeBuilder codeBuilder)
@@ -56,22 +72,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
                 }
 
                 codeBuilder.AddCode(line);
-            }
-        }
-
-        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
-        {
-            var genericArguments = Element.GetType().GetGenericArguments();
-
-            var typeName = Element.GetType().Name;
-
-            if (genericArguments.Length == 2)
-            {
-                var initCode = string.Format("var {0} = new {1}<{2}, {3}>();", ElementName,
-                    typeName.Substring(0, typeName.Length - 2), Element.GetType().GetGenericArguments()[0].Name,
-                    Element.GetType().GetGenericArguments()[1].Name);
-
-                codeBuilder.AddCode(initCode);
             }
         }
     }

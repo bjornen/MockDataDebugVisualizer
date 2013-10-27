@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
+namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ArrayTypeDumper : AbstractComplexTypeDumper
     {
@@ -14,6 +14,19 @@ namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
             _arrayLength = 0;
         }
 
+        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
+        {
+            var genericArguments = Element.GetType().GetGenericArguments();
+
+            var typeName = Element.GetType().Name;
+
+            if (genericArguments.Length == 0)
+            {
+                var initCode = string.Format("var {0} = new {1}[{2}];", ElementName, typeName.Substring(0, typeName.Length - 2), _arrayLength);
+
+                codeBuilder.AddCode(initCode);
+            }
+        }
         public override void ResolveMembers(CodeBuilder codeBuilder)
         {
             var elementList = Element as IList;
@@ -41,20 +54,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.Dumpers
 
                     codeBuilder.AddCode(memberInitCode);
                 }
-            }
-        }
-
-        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
-        {
-            var genericArguments = Element.GetType().GetGenericArguments();
-
-            var typeName = Element.GetType().Name;
-
-            if (genericArguments.Length == 0)
-            {
-                var initCode = string.Format("var {0} = new {1}[{2}];", ElementName, typeName.Substring(0, typeName.Length - 2), _arrayLength);
-
-                codeBuilder.AddCode(initCode);
             }
         }
 

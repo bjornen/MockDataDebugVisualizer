@@ -6,7 +6,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         protected AbstractOneLineInitDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
 
         public abstract string PublicOneLineInitCode();
-        public abstract string PrivateOneLineInitCode();
+
+        public virtual string PrivateOneLineInitCode()
+        {
+            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, PublicOneLineInitCode());
+        }
 
         internal override void AddPublicMember(CodeBuilder codeBuilder)
         {
