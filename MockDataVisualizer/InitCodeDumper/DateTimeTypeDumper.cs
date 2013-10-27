@@ -2,9 +2,9 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class DateTimeTypeDumper : Dumper, IOneLineInit
+    public class DateTimeTypeDumper : DumperBase, IOneLineInitDumper
     {
-        public DateTimeTypeDumper(Dumper parent, object element, string name) : base(parent, element, name) {}
+        public DateTimeTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) {}
 
         public string PublicOneLineInitCode()
         {
@@ -20,7 +20,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, publicInitCode);
         }
 
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             var memberInitCode = PrivateOneLineInitCode();
 
@@ -29,7 +29,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             codeBuilder.AddCode(initCode);
         }
 
-        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             var memberInitCode = PublicOneLineInitCode();
 

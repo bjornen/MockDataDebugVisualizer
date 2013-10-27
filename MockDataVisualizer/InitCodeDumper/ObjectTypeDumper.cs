@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class ObjectTypeDumper : Dumper
+    public class ObjectTypeDumper : AbstractComplexTypeDumper
     {
-        internal ObjectTypeDumper(Dumper parent, object element, string name) : base(parent, element, name)
+        internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
             var typeName = name;
 
@@ -18,21 +21,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             AddFoundElement(element, ElementName);
         }
 
-        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
 
-            if (!string.IsNullOrWhiteSpace(parentName))
-            {
-                var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
+            var initCode = string.Format("{0}.{1} = {2};", parentName, elementNameInParent, ElementName);
                 
-                codeBuilder.AddCode(initCode);
-            }
+            codeBuilder.AddCode(initCode);
         }
 
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             ResolveTypeInitilization(codeBuilder);
 
@@ -43,14 +43,13 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             codeBuilder.AddCode(initCode);
         }
 
-        public void ResolveTypeInitilization(CodeBuilder codeBuilder)
+        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
             var typeName = ResolveInitTypeName(Element.GetType());
 
-            if (Type.GetConstructor(Type.EmptyTypes) == null)
+            if (Element.GetType().GetConstructor(Type.EmptyTypes) == null)
             {
-                var initCode = string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));",
-                    ElementName, typeName);
+                var initCode = string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName);
                 codeBuilder.AddCode(initCode);
             }
             else
@@ -60,7 +59,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             }
         }
 
-        public void ResolveMembers(CodeBuilder codeBuilder)
+        public override void ResolveMembers(CodeBuilder codeBuilder)
         {
             foreach (var member in Members)
             {
@@ -89,16 +88,122 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPublic(codeBuilder, ElementName, member.Name);
+                        dumper.AddPublicMemberAndAssignToParent(codeBuilder, ElementName, member.Name);
                     }
                     else if (CanWriteToMember(member))
                     {
                         var dumper = GetDumper(this, memberValue, member.Name);
 
-                        dumper.AddPrivate(codeBuilder, ElementName, member.Name);
+                        dumper.AddPrivateMemberAndAssignToParrent(codeBuilder, ElementName, member.Name);
                     }
                 }
             }
+        }
+
+
+
+
+
+
+
+        internal IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } } // use .OrderBy(x => x.Name); to make unit tests work
+        private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
+
+
+        internal bool IsElementAlreadyTouched(object element)
+        {
+            var hash = element.GetHashCode();
+
+            return _foundElements.Any(t => _foundElements.ContainsKey(hash));
+        }
+
+        internal string GetNameOfAlreadyTouchedElement(object element)
+        {
+            var hash = element.GetHashCode();
+
+            if (_foundElements.ContainsKey(hash))
+            {
+                return _foundElements[hash];
+            }
+
+            return null;
+        }
+
+        internal Type GetMemberType(MemberInfo member)
+        {
+            var fieldInfo = member as FieldInfo;
+            var propertyInfo = member as PropertyInfo;
+
+            if (fieldInfo == null && propertyInfo == null) return null;
+
+            return fieldInfo != null ? fieldInfo.FieldType : propertyInfo.PropertyType;
+        }
+
+        internal object GetMemberValue(MemberInfo member)
+        {
+            if (member == null) return null;
+
+            if (member.Name.IndexOf("BackingField", StringComparison.Ordinal) != -1) return null;
+
+            var fieldInfo = member as FieldInfo;
+            var propertyInfo = member as PropertyInfo;
+
+            if (fieldInfo == null && propertyInfo == null) return null;
+
+            return fieldInfo != null ? fieldInfo.GetValue(Element) : propertyInfo.GetValue(Element, null);
+        }
+
+        internal void AddFoundElement(object element, string elementName)
+        {
+            var hash = element.GetHashCode();
+
+            if (!_foundElements.ContainsKey(hash))
+            {
+                _foundElements.Add(hash, elementName);
+            }
+        }
+
+        internal bool IsMemberPublic(MemberInfo member)
+        {
+            return PublicMembers.Contains(member);
+        }
+
+        internal bool CanWriteToMember(MemberInfo member)
+        {
+            var propertyInfo = member as PropertyInfo;
+
+            if (propertyInfo != null)
+            {
+                return propertyInfo.CanWrite;
+            }
+
+            return member is FieldInfo;
+        }
+
+        internal bool CanWriteToMemberWithSetter(MemberInfo member)
+        {
+            var propertyInfo = member as PropertyInfo;
+
+            if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+            {
+                return propertyInfo.CanWrite;
+            }
+
+            return member is FieldInfo;
+        }
+
+        public static string ResolveInitTypeName(Type type)
+        {
+            var initTypeName = ResolveTypeName(type);
+
+            foreach (var argumentType in type.GetGenericArguments())
+            {
+                var argumentInitName = ResolveInitTypeName(argumentType);
+
+                initTypeName = string.Format("{0}<{1}>", initTypeName, argumentInitName);
+            }
+
+            return initTypeName;
         }
     }
 }

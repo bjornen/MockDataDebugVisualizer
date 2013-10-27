@@ -1,7 +1,7 @@
 ﻿
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public interface IOneLineInit
+    public interface IOneLineInitDumper
     {
         string PublicOneLineInitCode();
         string PrivateOneLineInitCode();

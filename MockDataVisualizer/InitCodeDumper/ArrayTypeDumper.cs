@@ -3,18 +3,18 @@ using System.Collections;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class ArrayTypeDumper : Dumper
+    public class ArrayTypeDumper : AbstractComplexTypeDumper
     {
         private int _arrayLength;
 
-        public ArrayTypeDumper(Dumper parent, object element, string name) : base(parent, element, name)
+        public ArrayTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
             ElementName = string.Format("{0}_{1}", name, ObjectCounter++);
             
             _arrayLength = 0;
         }
 
-        public void ResolveMembers(CodeBuilder codeBuilder)
+        public override void ResolveMembers(CodeBuilder codeBuilder)
         {
             var elementList = Element as IList;
 
@@ -22,7 +22,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 var dumper = GetDumper(this, elementList[i], elementList[i].GetType().Name);
 
-                var oneLineDumper = dumper as IOneLineInit;
+                var oneLineDumper = dumper as IOneLineInitDumper;
 
                 if (oneLineDumper != null)
                 {
@@ -30,9 +30,12 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
                     codeBuilder.AddCode(memberInitCode);
                 }
-                else
+                
+                var objectDumper = dumper as AbstractComplexTypeDumper;
+                
+                if(objectDumper != null)
                 {
-                    dumper.AddPublic(codeBuilder, null, null);
+                    objectDumper.AddPublicMember(codeBuilder);
 
                     var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, i, dumper.ElementName);
 
@@ -41,23 +44,25 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             }
         }
 
-        public void ResolveTypeInitilizationCode(CodeBuilder codeBuilder)
+        public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
-            var genericArguments = Type.GetGenericArguments();
+            var genericArguments = Element.GetType().GetGenericArguments();
+
+            var typeName = Element.GetType().Name;
 
             if (genericArguments.Length == 0)
             {
-                var initCode = string.Format("var {0} = new {1}[{2}];", ElementName, TypeName.Substring(0, TypeName.Length - 2), _arrayLength);
+                var initCode = string.Format("var {0} = new {1}[{2}];", ElementName, typeName.Substring(0, typeName.Length - 2), _arrayLength);
 
                 codeBuilder.AddCode(initCode);
             }
         }
 
-        public override void AddPublic(CodeBuilder  codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPublicMemberAndAssignToParent(CodeBuilder  codeBuilder, string parentName, string elementNameInParent)
         {
             SetArrayLength();
 
-            ResolveTypeInitilizationCode(codeBuilder);
+            ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
 
@@ -66,11 +71,26 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             codeBuilder.AddCode(line);
         }
 
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPublicMember(CodeBuilder codeBuilder)
         {
             SetArrayLength();
 
-            ResolveTypeInitilizationCode(codeBuilder);
+            base.AddPublicMember(codeBuilder);
+        }
+
+        public override void AddPrivateMember(CodeBuilder codeBuilder)
+        {
+            SetArrayLength();
+
+            base.AddPublicMember(codeBuilder);
+        }
+
+
+        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        {
+            SetArrayLength();
+
+            ResolveTypeInitilization(codeBuilder);
 
             ResolveMembers(codeBuilder);
 

@@ -2,11 +2,11 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class ValueTypeDumper : Dumper, IOneLineInit
+    public class ValueTypeDumper : DumperBase, IOneLineInitDumper
     {
-        public ValueTypeDumper(Dumper parent, object element, string name) : base(parent, element, name){}
+        public ValueTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){}
 
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             var privateInitCode = PrivateOneLineInitCode();
             
@@ -15,7 +15,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             codeBuilder.AddCode(initCode);
         }
 
-        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
+        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
             var memberInitCode = PublicOneLineInitCode();
             

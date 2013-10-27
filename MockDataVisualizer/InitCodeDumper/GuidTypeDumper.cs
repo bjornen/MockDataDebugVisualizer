@@ -2,34 +2,36 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class GuidTypeDumper : Dumper
+    public class GuidTypeDumper : DumperBase, IOneLineInitDumper
     {
-        public GuidTypeDumper(Dumper parent, object element, string name) : base(parent, element, name)
+        public GuidTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
         {
         }
 
-        public string GetPublicInitCode()
+        public override void AddPrivateMemberAndAssignToParrent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return string.Format("Guid.Parse(\"{0}\")", Element);
+            var line = string.Format("SetValue({0}, \"{1}\", {2});", parentName, elementNameInParent, PrivateOneLineInitCode());
+            
+            codeBuilder.AddCode(line);
         }
 
-        public string GetPrivateInitCode()
+        public override void AddPublicMemberAndAssignToParent(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            return GetPublicInitCode();
-        }
-
-        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
-        {
-            var memberInitCode = GetPublicInitCode();
+            var memberInitCode = PublicOneLineInitCode();
             
             var initCode = string.Format("{0}.{1} = {2};", parentName, ElementName, memberInitCode);
             
             codeBuilder.AddCode(initCode);
+        }
+
+        public string PublicOneLineInitCode()
+        {
+            return string.Format("Guid.Parse(\"{0}\")", Element);
+        }
+
+        public string PrivateOneLineInitCode()
+        {
+            return PublicOneLineInitCode();
         }
     }
 }
