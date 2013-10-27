@@ -48,12 +48,14 @@
     <Compile Include="DebugVisualizers\InitCode\InitCodeVisualizer.cs" />
     <Compile Include="DebugVisualizers\AbstractMockDataObjectSource.cs" />
     <Compile Include="DebugVisualizers\AbstractMockDataVisualizer.cs" />
+    <Compile Include="CodeBuilder.cs" />
     <Compile Include="InitCodeDumper\ArrayTypeDumper.cs" />
     <Compile Include="InitCodeDumper\DateTimeTypeDumper.cs" />
     <Compile Include="InitCodeDumper\DictionaryTypeDumper.cs" />
     <Compile Include="InitCodeDumper\Dumper.cs" />
     <Compile Include="InitCodeDumper\EnumerableTypeDumper.cs" />
     <Compile Include="InitCodeDumper\EnumTypeDumper.cs" />
+    <Compile Include="InitCodeDumper\IOneLineInit.cs" />
     <Compile Include="InitCodeDumper\ObjectTypeDumper.cs" />
     <Compile Include="InitCodeDumper\StringTypeDumper.cs" />
     <Compile Include="InitCodeDumper\GuidTypeDumper.cs" />

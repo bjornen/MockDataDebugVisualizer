@@ -2,34 +2,40 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public class DateTimeTypeDumper : Dumper
+    public class DateTimeTypeDumper : Dumper, IOneLineInit
     {
         public DateTimeTypeDumper(Dumper parent, object element, string name) : base(parent, element, name) {}
 
-        public override string GetPublicInitCode()
+        public string PublicOneLineInitCode()
         {
             var dt = Element is DateTime ? (DateTime) Element : new DateTime();
 
             return string.Format("new DateTime({0})", dt.Ticks);
         }
 
-        public override string GetPrivateInitCode()
+        public string PrivateOneLineInitCode()
         {
-            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, GetPublicInitCode());
+            var publicInitCode = PublicOneLineInitCode();
+
+            return string.Format("SetValue({0}, \"{1}\", {2})", Parent.ElementName, ElementName, publicInitCode);
         }
 
-        public override string AddPrivate(string initCode, string parentName, string elementNameInParent)
+        public override void AddPrivate(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            var memberInitCode = GetPrivateInitCode();
-            initCode = string.Format("{0}{1}{2};", initCode, Environment.NewLine, memberInitCode);
-            return initCode;
+            var memberInitCode = PrivateOneLineInitCode();
+
+            var initCode = string.Format("{0};", memberInitCode);
+            
+            codeBuilder.AddCode(initCode);
         }
 
-        public override string AddPublic(string initCode, string parentName, string elementNameInParent)
+        public override void AddPublic(CodeBuilder codeBuilder, string parentName, string elementNameInParent)
         {
-            var memberInitCode = GetPublicInitCode();
-            initCode = string.Format("{0}{1}{2}.{3} = {4};", initCode, Environment.NewLine, parentName, ElementName, memberInitCode);
-            return initCode;
+            var memberInitCode = PublicOneLineInitCode();
+
+            var initCode = string.Format("{0}.{1} = {2};", parentName, ElementName, memberInitCode);
+            
+            codeBuilder.AddCode(initCode);
         }
     }
 }
