@@ -1,4 +1,6 @@
 ﻿
+using System.Linq;
+
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public abstract class AbstractComplexTypeDumper : DumperBase
@@ -20,11 +22,20 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
         internal override void AddPublicMember(CodeBuilder codeBuilder)
         {
-            ResolveTypeInitilization(codeBuilder);
+            if (IsElementAlreadyTouched())
+            {
+                codeBuilder.PushInitValue(GetNameOfAlreadyTouchedElement());
+            }
+            else
+            {
+                AddFoundElement();
 
-            ResolveMembers(codeBuilder);
+                ResolveTypeInitilization(codeBuilder);
 
-            codeBuilder.PushInitValue(ElementName);
+                ResolveMembers(codeBuilder);
+
+                codeBuilder.PushInitValue(ElementName);                
+            }
         }
 
         internal override void AddPrivateMember(CodeBuilder codeBuilder)
@@ -35,6 +46,35 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         private static string LowerCaseFirst(string variableName)
         {
             return string.IsNullOrEmpty(variableName) ? string.Empty : char.ToLower(variableName[0]) + variableName.Substring(1);
+        }
+
+        private bool IsElementAlreadyTouched()
+        {
+            var hash = Element.GetHashCode();
+
+            return _foundElements.Any(t => _foundElements.ContainsKey(hash));
+        }
+
+        private string GetNameOfAlreadyTouchedElement()
+        {
+            var hash = Element.GetHashCode();
+
+            if (_foundElements.ContainsKey(hash))
+            {
+                return _foundElements[hash];
+            }
+
+            return null;
+        }
+
+        private void AddFoundElement()
+        {
+            var hash = Element.GetHashCode();
+
+            if (!_foundElements.ContainsKey(hash))
+            {
+                _foundElements.Add(hash, ElementName);
+            }
         }
     }
 }

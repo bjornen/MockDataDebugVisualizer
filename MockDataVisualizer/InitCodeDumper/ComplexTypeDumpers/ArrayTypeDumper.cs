@@ -36,9 +36,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 dumper.AddPublicMember(codeBuilder);
 
-                var memberInitCode = string.Format("{0}[{1}] = {2};", ElementName, i, codeBuilder.PopInitValue());
-
-                codeBuilder.AddCode(memberInitCode);
+                codeBuilder.AddCode(string.Format("{0}[{1}] = {2};", ElementName, i, codeBuilder.PopInitValue()));
             }
         }
     }

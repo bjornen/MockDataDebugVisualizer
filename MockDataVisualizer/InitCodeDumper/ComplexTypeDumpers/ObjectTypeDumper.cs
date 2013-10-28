@@ -10,10 +10,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
         private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } } // use .OrderBy(x => x.Name); to make unit tests work
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
-        {
-            AddFoundElement(element, ElementName);
-        }
+        internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
@@ -37,52 +34,19 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 if (memberValue == null) continue;
 
-                if (IsElementAlreadyTouched(memberValue))
+                var dumper = GetDumper(this, memberValue, member.Name);
+
+                dumper.AddPublicMember(codeBuilder);
+
+                if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
                 {
-                    if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
-                    {
-                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue)));
-                    }
-                    else if (CanWriteToMember(member))
-                    {
-                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, GetNameOfAlreadyTouchedElement(memberValue)));
-                    }
+                    codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
                 }
-                else
+                else if (CanWriteToMember(member))
                 {
-                    var dumper = GetDumper(this, memberValue, member.Name);
-
-                    dumper.AddPublicMember(codeBuilder);
-
-                    if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
-                    {
-                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
-                    }
-                    else if (CanWriteToMember(member))
-                    {
-                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
-                    }
+                    codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
                 }
             }
-        }
-
-        private static bool IsElementAlreadyTouched(object element)
-        {
-            var hash = element.GetHashCode();
-
-            return _foundElements.Any(t => _foundElements.ContainsKey(hash));
-        }
-
-        private static string GetNameOfAlreadyTouchedElement(object element)
-        {
-            var hash = element.GetHashCode();
-
-            if (_foundElements.ContainsKey(hash))
-            {
-                return _foundElements[hash];
-            }
-
-            return null;
         }
 
         private object GetMemberValue(MemberInfo member)
@@ -97,16 +61,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             if (fieldInfo == null && propertyInfo == null) return null;
 
             return fieldInfo != null ? fieldInfo.GetValue(Element) : propertyInfo.GetValue(Element, null);
-        }
-
-        private static void AddFoundElement(object element, string elementName)
-        {
-            var hash = element.GetHashCode();
-
-            if (!_foundElements.ContainsKey(hash))
-            {
-                _foundElements.Add(hash, elementName);
-            }
         }
 
         private bool IsMemberPublic(MemberInfo member)
