@@ -293,7 +293,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dump = DumperBase.DumpInitlizationCode(dic);
 
-            Assert.Equal("var dictionary_0 = new Dictionary<String, Foo>();\r\nvar foo_2_3 = new Foo();\r\nfoo_2_3.FooValue = \"foo\";\r\nSetValue(foo_2_3, \"_privateFooField\", 0);\r\ndictionary_0.Add(\"key\", foo_2_3);", dump);
+            Assert.Equal("var dictionary_0 = new Dictionary<String, Foo>();\r\nvar foo_1 = new Foo();\r\nfoo_1.FooValue = \"foo\";\r\nSetValue(foo_1, \"_privateFooField\", 0);\r\ndictionary_0.Add(\"key\", foo_1);", dump);
         }
 
         [Fact]
@@ -303,7 +303,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dump = DumperBase.DumpInitlizationCode(dic);
 
-            Assert.Equal("var dictionary_0 = new Dictionary<Foo, Foo>();\r\nvar foo_1_3 = new Foo();\r\nfoo_1_3.FooValue = \"fookey\";\r\nSetValue(foo_1_3, \"_privateFooField\", 0);\r\nvar foo_2_4 = new Foo();\r\nfoo_2_4.FooValue = \"foovalue\";\r\nSetValue(foo_2_4, \"_privateFooField\", 0);\r\ndictionary_0.Add(foo_1_3, foo_2_4);", dump);
+            Assert.Equal("var dictionary_0 = new Dictionary<Foo, Foo>();\r\nvar foo_1 = new Foo();\r\nfoo_1.FooValue = \"fookey\";\r\nSetValue(foo_1, \"_privateFooField\", 0);\r\nvar foo_2 = new Foo();\r\nfoo_2.FooValue = \"foovalue\";\r\nSetValue(foo_2, \"_privateFooField\", 0);\r\ndictionary_0.Add(foo_1, foo_2);", dump);
         }
 
         [Fact]
@@ -313,7 +313,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dump = DumperBase.DumpInitlizationCode(dic);
 
-            Assert.Equal("var dictionary_0 = new Dictionary<Foo, String>();\r\nvar foo_1_3 = new Foo();\r\nfoo_1_3.FooValue = \"foo\";\r\nSetValue(foo_1_3, \"_privateFooField\", 0);\r\ndictionary_0.Add(foo_1_3, \"key\");", dump);
+            Assert.Equal("var dictionary_0 = new Dictionary<Foo, String>();\r\nvar foo_1 = new Foo();\r\nfoo_1.FooValue = \"foo\";\r\nSetValue(foo_1, \"_privateFooField\", 0);\r\ndictionary_0.Add(foo_1, \"key\");", dump);
         }
 
         public static Root ComplexRootWithPrivateMembersAndInterfacesWithPrivateMembersAndCircularReferenceAndPrivateObjectMemberAndSingleArgumentEnumerableAndPrivateEnumerable()

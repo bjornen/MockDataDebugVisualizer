@@ -30,11 +30,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 dynamic keyValue = element;
 
-                var keyName = string.Format("{0}_{1}", keyValue.Key.GetType().Name, ObjectCounter++); //Möjligt problem med already touched elements
-                var valueName = string.Format("{0}_{1}", keyValue.Value.GetType().Name, ObjectCounter++);
-                
-                var keyDumper = GetDumper(this, keyValue.Key, keyName);
-                var valueDumper = GetDumper(this, keyValue.Value, valueName);
+                var keyDumper = GetDumper(this, keyValue.Key, keyValue.Key.GetType().Name);
+
+                var valueDumper = GetDumper(this, keyValue.Value, keyValue.Value.GetType().Name);
 
                 keyDumper.AddPublicMember(codeBuilder);
 
