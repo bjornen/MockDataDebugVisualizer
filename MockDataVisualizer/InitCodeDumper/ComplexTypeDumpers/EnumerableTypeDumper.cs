@@ -4,7 +4,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class EnumerableTypeDumper : AbstractComplexTypeDumper
     {
-        public EnumerableTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
+        public EnumerableTypeDumper(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
@@ -28,7 +28,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
             foreach (var element in enumerableElement)
             {
-                var dumper = GetDumper(this, element, element.GetType().Name);
+                var dumper = GetDumper(element, element.GetType().Name);
 
                 dumper.ResolveInitCode(codeBuilder);
 

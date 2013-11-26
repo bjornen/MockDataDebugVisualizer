@@ -10,7 +10,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
         private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).OrderByDescending(x => x.Name); } } // use .OrderBy(x => x.Name); to make unit tests work
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
+        internal ObjectTypeDumper(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
@@ -38,7 +38,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                     if(!IsDumpable(memberValue)) continue;
 
-                    var dumper = GetDumper(this, memberValue, member.Name);
+                    var dumper = GetDumper(memberValue, member.Name);
 
                     dumper.ResolveInitCode(codeBuilder);
 

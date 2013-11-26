@@ -11,7 +11,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
     {
         internal static readonly string SetValueMethod = "public static void SetValue<T>(object obj, string propName, T val) { if (obj == null) throw new ArgumentNullException(\"obj\"); var t = obj.GetType(); if (t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) != null) { t.InvokeMember(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, null, obj, new object[] { val }); } else { FieldInfo fi = null; while (fi == null && t != null) { fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); t = t.BaseType; } if (fi == null) throw new ArgumentOutOfRangeException(\"propName\", string.Format(\"Field {0} was not found in Type {1}\", propName, obj.GetType().FullName)); fi.SetValue(obj, val); } }";
         internal readonly object Element;
-        internal readonly DumperBase Parent;
         
         internal string ElementName { get; set; }
 
@@ -20,9 +19,8 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         internal static int ObjectCounter { get; set; }
         internal static bool DumpPublicOnly { get; set; }
 
-        protected DumperBase(DumperBase parent, object element, string name)
+        protected DumperBase(object element, string name)
         {
-            Parent = parent;
             Element = element;
             ElementName = name;
         }
@@ -49,7 +47,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             ObjectCounter = 0;
 
-            var dumper = GetDumper(null, o, ResolveTypeName(o.GetType()).ToLower());
+            var dumper = GetDumper(o, ResolveTypeName(o.GetType()).ToLower());
 
             var codeBuilder = new CodeBuilder();
 
@@ -75,29 +73,29 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return SkipTypes.Any(skipType => skipType == o.GetType());
         }
 
-        internal static DumperBase GetDumper(DumperBase parent, object o, string name)
+        internal static DumperBase GetDumper( object o, string name)
         {
             var type = o.GetType();
 
-            if (o is Guid) return new GuidTypeDumper(parent, o, name);
+            if (o is Guid) return new GuidTypeDumper(o, name);
 
-            if (o is DateTime) return new DateTimeTypeDumper(parent, o, name);
+            if (o is DateTime) return new DateTimeTypeDumper(o, name);
 
-            if (o is Enum) return new EnumTypeDumper(parent, o, name);
+            if (o is Enum) return new EnumTypeDumper(o, name);
 
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(parent, o, name);
+            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(o, name);
 
-            if (o is ValueType) return new ValueTypeDumper(parent, o, name);
+            if (o is ValueType) return new ValueTypeDumper(o, name);
 
-            if (o is string) return new StringTypeDumper(parent, o, name);
+            if (o is string) return new StringTypeDumper(o, name);
 
-            if (o is Array) return new ArrayTypeDumper(parent, o , name);
+            if (o is Array) return new ArrayTypeDumper(o , name);
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryTypeDumper(parent, o, name);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryTypeDumper(o, name);
 
-            if (o is IEnumerable) return new EnumerableTypeDumper(parent, o, name);
+            if (o is IEnumerable) return new EnumerableTypeDumper(o, name);
 
-            return new ObjectTypeDumper(parent, o, name);
+            return new ObjectTypeDumper(o, name);
         }
 
         internal static string ResolveTypeName(Type type)

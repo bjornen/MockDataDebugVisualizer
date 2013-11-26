@@ -2,7 +2,7 @@
 {
     public class GuidTypeDumper : DumperBase
     {
-        public GuidTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
+        public GuidTypeDumper(object element, string name) : base(element, name) { }
 
         internal override void ResolveInitCode(CodeBuilder codeBuilder)
         {

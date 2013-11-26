@@ -7,7 +7,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
     {
         private readonly int _arrayLength;
 
-        public ArrayTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
+        public ArrayTypeDumper(object element, string name) : base(element, name)
         {
             _arrayLength = (Element as Array).Length;
         }
@@ -32,7 +32,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
             for (var i = 0; i < elementList.Count; i++)
             {
-                var dumper = GetDumper(this, elementList[i], elementList[i].GetType().Name);
+                var dumper = GetDumper(elementList[i], elementList[i].GetType().Name);
 
                 dumper.ResolveInitCode(codeBuilder);
 

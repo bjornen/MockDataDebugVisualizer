@@ -5,7 +5,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public abstract class AbstractComplexTypeDumper : DumperBase
     {
-        protected AbstractComplexTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name)
+        protected AbstractComplexTypeDumper(object element, string name) : base(element, name)
         {
             var typeName = name;
 

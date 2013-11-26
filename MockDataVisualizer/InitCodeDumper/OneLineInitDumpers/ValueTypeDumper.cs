@@ -4,7 +4,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
     public class ValueTypeDumper : DumperBase
     {
-        public ValueTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){}
+        public ValueTypeDumper(object element, string name) : base(element, name){}
 
         internal override void ResolveInitCode(CodeBuilder codeBuilder)
         {
