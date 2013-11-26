@@ -34,11 +34,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 var valueDumper = GetDumper(this, keyValue.Value, keyValue.Value.GetType().Name);
 
-                keyDumper.AddPublicMember(codeBuilder);
+                keyDumper.ResolveInitCode(codeBuilder);
 
                 var line = string.Format("{0}.Add({1},", ElementName, codeBuilder.PopInitValue());
 
-                valueDumper.AddPublicMember(codeBuilder);
+                valueDumper.ResolveInitCode(codeBuilder);
    
                 line = string.Format("{0} {1});", line, codeBuilder.PopInitValue());
 

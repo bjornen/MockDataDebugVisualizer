@@ -24,6 +24,7 @@ namespace MockDataVisualizerTestConsole.Tests.TestObjects
         public Foo[] FooArray { get; set; }
         public int[] NumbersArray { get; set; }
         public Dictionary<string, string> Dictionary { get; set; }
+        public Root Self { get; set; }
 
         public Foo ProtectedSetFoo { get; protected set; }
 

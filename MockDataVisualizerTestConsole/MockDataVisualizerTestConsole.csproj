@@ -11,7 +11,8 @@
     <RootNamespace>MockDataVisualizerTestConsole</RootNamespace>
     <AssemblyName>MockDataVisualizerTestConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -36,6 +37,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICA.Base">
+      <HintPath>..\..\..\..\CCViews\h00jnm_ISE_rel_3.1.9\ISE\ISE_src\ICA.MittICA\ICA.MittICA.Recipes\ICA.MittICA.Recipes\bin\Debug\ICA.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="ICA.MittICA.Recipes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\ICA.MittICA.Recipes.dll</HintPath>
+    </Reference>
+    <Reference Include="ICA.MittICA.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\ICA.MittICA.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +83,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,7 +6,7 @@ namespace MockDataDebugVisualizer.DebugVisualizers.InitCodeMethodSetValue
     {
         public override string Dump(object objectToDump)
         {
-            return DumperBase.DumpInitilizationCodeMethodAndSetValueMethod(objectToDump);
+            return DumperBase.DumpCode(objectToDump, DumpMode.WrappedCodeAndMethod, Visibility.PrivateAndPublic);
         }
     }
 }

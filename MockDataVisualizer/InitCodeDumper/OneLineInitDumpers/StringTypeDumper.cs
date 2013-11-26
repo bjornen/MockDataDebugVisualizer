@@ -1,18 +1,13 @@
 ﻿
 namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
-    public class StringTypeDumper : AbstractOneLineInitDumper
+    public class StringTypeDumper : DumperBase
     {
         public StringTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){}
 
-        public override string PublicOneLineInitCode()
+        internal override void ResolveInitCode(CodeBuilder codeBuilder)
         {
-            return string.Format("\"{0}\"", Element);
-        }
-
-        public override string PrivateOneLineInitCode()
-        {
-            return string.Format("SetValue({0}, \"{1}\", \"{2}\")", Parent.ElementName, ElementName, Element);
+            codeBuilder.PushInitValue(string.Format("\"{0}\"", Element));
         }
     }
 }
