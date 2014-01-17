@@ -28,6 +28,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
             if (Element is decimal)
                 value = string.Format("{0}M", value);
 
+            if (Element is short)
+                value = string.Format("(short){0}", value);
+
+            if (Element is ushort)
+                value = string.Format("(ushort){0}", value);
+
+            if (Element is byte)
+                value = string.Format("(byte){0}", value);
+
+            if (Element is sbyte)
+                value = string.Format("(sbyte){0}", value);
+
             codeBuilder.PushInitValue(value);
         }
     }
