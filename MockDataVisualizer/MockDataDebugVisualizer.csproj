@@ -62,7 +62,6 @@
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\EnumerableTypeDumper.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\EnumTypeDumper.cs" />
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\ObjectTypeDumper.cs" />
-    <Compile Include="InitCodeDumper\OneLineInitDumpers\SmallValueTypeDumper.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\StringTypeDumper.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\GuidTypeDumper.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\ValueTypeDumper.cs" />

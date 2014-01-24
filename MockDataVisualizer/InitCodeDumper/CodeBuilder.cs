@@ -20,11 +20,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             CodeList.Add(code);
         }
 
-        public void AddCode(CodeBuilder builder)
-        {
-            CodeList.AddRange(builder.CodeList);
-        }
-
         public void PushInitValue(string code)
         {
             InitValueStack.Push(code);
@@ -33,11 +28,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         public string PopInitValue()
         {
             return InitValueStack.Pop();
-        }
-
-        public string Indentation(int level)
-        {
-            return new string('\t', level);
         }
 
         public override string ToString()
