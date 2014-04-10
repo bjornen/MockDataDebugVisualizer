@@ -6,7 +6,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
     {
         public ValueTypeDumper(object element, string name) : base(element, name){}
 
-        internal override void ResolveInitCode(CodeBuilder codeBuilder)
+        public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
             var value = string.Format("{0}", Convert.ToString(Element).ToLower());
 

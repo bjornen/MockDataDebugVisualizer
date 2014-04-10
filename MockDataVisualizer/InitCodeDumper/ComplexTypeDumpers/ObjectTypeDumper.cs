@@ -62,7 +62,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             return PublicMembers.Contains(member) && CanWriteToMemberWithSetter(member);
         }
 
-        private bool IsDumpable(object obj)
+        private static bool IsDumpable(object obj)
         {
             if (obj == null) return false;
 

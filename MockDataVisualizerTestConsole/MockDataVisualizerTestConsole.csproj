@@ -64,7 +64,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtentions.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\ArrayTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\DictionaryTypeDumperTests.cs" />
     <Compile Include="Tests\ObjectCreateCodeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\DateTimeTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\EnumTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\GuidTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\StringTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\ValueTypeDumperTests.cs" />
     <Compile Include="Tests\TestObjects\Bar.cs" />
     <Compile Include="Tests\TestObjects\EnumObject.cs" />
     <Compile Include="Tests\TestObjects\Foo.cs" />

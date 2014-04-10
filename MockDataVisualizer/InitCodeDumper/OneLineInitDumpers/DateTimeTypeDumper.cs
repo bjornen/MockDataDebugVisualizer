@@ -6,7 +6,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
     {
         public DateTimeTypeDumper(object element, string name) : base(element, name) {}
 
-        internal override void ResolveInitCode(CodeBuilder codeBuilder)
+        public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
             var dt = Element is DateTime ? (DateTime)Element : new DateTime();
 

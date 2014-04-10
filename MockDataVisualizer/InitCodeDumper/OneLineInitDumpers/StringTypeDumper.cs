@@ -5,9 +5,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
     {
         public StringTypeDumper(object element, string name) : base(element, name){}
 
-        internal override void ResolveInitCode(CodeBuilder codeBuilder)
+        public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
-            codeBuilder.PushInitValue(string.Format("\"{0}\"", Element));
+            codeBuilder.PushInitValue(Element == null ? "null" : string.Format("\"{0}\"", Element));
         }
     }
 }

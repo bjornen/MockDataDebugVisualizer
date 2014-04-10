@@ -266,18 +266,6 @@ namespace MockDataVisualizerTestConsole.Tests
             Assert.Equal("var nonparameterlessctorobj_0 = (NonParameterlessCtorObj) FormatterServices.GetUninitializedObject(typeof (NonParameterlessCtorObj));\r\nnonparameterlessctorobj_0.Value = \"The values!\";", dump);
         }
 
-        //[Fact]
-        //public void Can_dump_exception()
-        //{
-        //    //var se = new ServicedEntity<IEnumerable<StoreUsedStats>>(new Exception("Fel..."));
-
-        //    var se = new Exception("Fel..");
-
-        //    var dumper = Dumper.DumpInitlizationCode(se);
-
-        //    Assert.Equal("ServicedEntity<IEnumerable<StoreUsedStats>>", dumper);
-        //}
-
         [Fact]
         public void Can_dump_List()
         {

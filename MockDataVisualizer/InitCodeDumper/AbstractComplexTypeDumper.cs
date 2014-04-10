@@ -20,7 +20,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         public abstract void ResolveTypeInitilization(CodeBuilder codeBuilder);
         public abstract void ResolveMembers(CodeBuilder codeBuilder);
 
-        internal override void ResolveInitCode(CodeBuilder codeBuilder)
+        public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
             if (IsElementAlreadyTouched())
             {

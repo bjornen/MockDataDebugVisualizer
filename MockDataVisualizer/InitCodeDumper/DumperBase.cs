@@ -30,7 +30,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             SkipTypes = CfgLoader.GetHardCodedSkipTypes();    
         }
 
-        internal abstract void ResolveInitCode(CodeBuilder codeBuilder);
+        public abstract void ResolveInitCode(CodeBuilder codeBuilder);
         
         public static string DumpCode(object o, DumpMode mode, Visibility visibility)
         {
@@ -38,14 +38,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (ShouldSkipType(o)) return "In skip types list.";
 
-            if (visibility == Visibility.PublicOnly)
-            {
-                DumpPublicOnly = true;
-            }
-
-            _foundElements = new Dictionary<int, string>();
-
-            ObjectCounter = 0;
+            ResetDumper(visibility);
 
             var dumper = GetDumper(o, ResolveTypeName(o.GetType()).ToLower());
 
@@ -66,6 +59,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             }
 
             return code;
+        }
+
+        public static void ResetDumper(Visibility visibility)
+        {
+            if (visibility == Visibility.PublicOnly)
+            {
+                DumpPublicOnly = true;
+            }
+
+            _foundElements = new Dictionary<int, string>();
+
+            ObjectCounter = 0;
         }
 
         internal static bool ShouldSkipType(object o)
