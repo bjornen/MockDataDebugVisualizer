@@ -67,6 +67,10 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 DumpPublicOnly = true;
             }
+            if (visibility == Visibility.PrivateAndPublic)
+            {
+                DumpPublicOnly = false;
+            }
 
             _foundElements = new Dictionary<int, string>();
 
@@ -78,8 +82,10 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return SkipTypes.Any(skipType => skipType == o.GetType());
         }
 
-        internal static DumperBase GetDumper( object o, string name)
+        public static DumperBase GetDumper( object o, string name)
         {
+            if (o == null) return null;
+
             var type = o.GetType();
 
             if (o is Guid) return new GuidTypeDumper(o, name);
@@ -88,7 +94,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (o is Enum) return new EnumTypeDumper(o, name);
 
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(o, name);
+            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(o, name); //Struct
 
             if (o is ValueType) return new ValueTypeDumper(o, name);
 

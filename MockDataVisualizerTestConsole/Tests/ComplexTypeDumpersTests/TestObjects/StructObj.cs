@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MockDataVisualizerTestConsole.Tests.TestObjects
+namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects
 {
-    public class StructObj
+    public struct StructObj
     {
         public Guid Unique { get; set; }
         public DateTime Date { get; set; }

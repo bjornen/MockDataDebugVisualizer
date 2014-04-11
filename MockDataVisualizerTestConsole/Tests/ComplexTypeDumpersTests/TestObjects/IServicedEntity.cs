@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MockDataVisualizerTestConsole.Tests.TestObjects
+namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects
 {
     public interface IServicedEntity<T>
     {

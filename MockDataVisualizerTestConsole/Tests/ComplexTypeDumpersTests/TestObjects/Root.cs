@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MockDataVisualizerTestConsole.Tests.TestObjects
+namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects
 {
     [Serializable]
     public class Root

@@ -37,17 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICA.Base">
-      <HintPath>..\..\..\..\CCViews\h00jnm_ISE_rel_3.1.9\ISE\ISE_src\ICA.MittICA\ICA.MittICA.Recipes\ICA.MittICA.Recipes\bin\Debug\ICA.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="ICA.MittICA.Recipes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\ICA.MittICA.Recipes.dll</HintPath>
-    </Reference>
-    <Reference Include="ICA.MittICA.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\ICA.MittICA.Utility.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,22 +55,24 @@
     <Compile Include="ReflectionExtentions.cs" />
     <Compile Include="Tests\ComplexTypeDumpersTests\ArrayTypeDumperTests.cs" />
     <Compile Include="Tests\ComplexTypeDumpersTests\DictionaryTypeDumperTests.cs" />
-    <Compile Include="Tests\ObjectCreateCodeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\EnumerableTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\ObjectTypeDumperTests.cs" />
+    <Compile Include="Tests\DumperAbstractTests.cs" />
     <Compile Include="Tests\OneLineInitDumpersTests\DateTimeTypeDumperTests.cs" />
     <Compile Include="Tests\OneLineInitDumpersTests\EnumTypeDumperTests.cs" />
     <Compile Include="Tests\OneLineInitDumpersTests\GuidTypeDumperTests.cs" />
     <Compile Include="Tests\OneLineInitDumpersTests\StringTypeDumperTests.cs" />
     <Compile Include="Tests\OneLineInitDumpersTests\ValueTypeDumperTests.cs" />
-    <Compile Include="Tests\TestObjects\Bar.cs" />
-    <Compile Include="Tests\TestObjects\EnumObject.cs" />
-    <Compile Include="Tests\TestObjects\Foo.cs" />
-    <Compile Include="Tests\TestObjects\IServicedEntity.cs" />
-    <Compile Include="Tests\TestObjects\NonParameterlessCtorObj.cs" />
-    <Compile Include="Tests\TestObjects\PrivateCtorObject.cs" />
-    <Compile Include="Tests\TestObjects\Root.cs" />
-    <Compile Include="Tests\TestObjects\ServiceObject.cs" />
-    <Compile Include="Tests\TestObjects\StructObj.cs" />
-    <Compile Include="Tests\TestObjects\BoolObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Bar.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\EnumObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Foo.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\IServicedEntity.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\NonParameterlessCtorObj.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\PrivateCtorObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Root.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\ServiceObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\StructObj.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\BoolObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MockDataVisualizer\MockDataDebugVisualizer.csproj">
