@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.VisualStudio.DebuggerVisualizers;
 using MockDataDebugVisualizer.DebugVisualizers.InitCode;
 using MockDataDebugVisualizer.DebugVisualizers.InitCodeMethod;
 using MockDataDebugVisualizer.DebugVisualizers.InitCodeMethodSetValue;
@@ -15,6 +16,14 @@ namespace MockDataVisualizerTestConsole
         [STAThread]
         public static void Main(string[] args)
         {
+
+            var des = new InitCodeVisualizer();
+
+            if (des is DialogDebuggerVisualizer)
+            {
+                string str =  (des as DialogDebuggerVisualizer).ToString();
+            }
+
             Root createroot0 = Createroot_0();
 
             Root root =
