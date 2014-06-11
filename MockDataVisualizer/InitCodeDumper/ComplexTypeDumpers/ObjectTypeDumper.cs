@@ -38,7 +38,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 dumper.AddPublicMember(codeBuilder);
 
-                if (IsMemberPublic(member) && CanWriteToMemberWithSetter(member))
+                if (IsPublicAndWriteable(member))
                 {
                     codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
                 }
@@ -47,6 +47,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                     codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
                 }
             }
+        }
+
+        private bool IsPublicAndWriteable(MemberInfo member)
+        {
+            return IsMemberPublic(member) && CanWriteToMemberWithSetter(member);
         }
 
         private object GetMemberValue(MemberInfo member)

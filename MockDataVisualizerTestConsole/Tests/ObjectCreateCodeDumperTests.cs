@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.Serialization;
 using MockDataDebugVisualizer.InitCodeDumper;
 using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
 using MockDataVisualizerTestConsole.Tests.TestObjects;
@@ -254,17 +255,29 @@ namespace MockDataVisualizerTestConsole.Tests
             Assert.Equal("var nonparameterlessctorobj_0 = (NonParameterlessCtorObj) FormatterServices.GetUninitializedObject(typeof (NonParameterlessCtorObj));\r\nnonparameterlessctorobj_0.Value = \"The values!\";", dump);
         }
 
-        //[Fact]
-        //public void Can_dump_exception()
-        //{
-        //    //var se = new ServicedEntity<IEnumerable<StoreUsedStats>>(new Exception("Fel..."));
+        [Fact]
+        public void Can_dump_exception()
+        {
+            //var se = new Exception("Fel..");
 
-        //    var se = new Exception("Fel..");
+            
 
-        //    var dumper = Dumper.DumpInitlizationCode(se);
+            var se = new Exception();
+            SetValue(se, "HResult", -2146233088);
+            SetValue(se, "_message", "Fel..");
+            //SetValue(exception_0, "_data", data_1);
+            SetValue(se, "_remoteStackIndex", 0);
+            SetValue(se, "_HResult", -2146233088);
+            SetValue(se, "_xptrs", 0);
+            SetValue(se, "_xcode", -532462766);
+            SetValue(se, "_ipForWatsonBuckets", 0);
+            //SetValue(exception_0, "_safeSerializationManager", _safeSerializationManager_3);
+            var _safeSerializationManager_3 = (SafeSerializationManager)FormatterServices.GetUninitializedObject(typeof(SafeSerializationManager));
 
-        //    Assert.Equal("ServicedEntity<IEnumerable<StoreUsedStats>>", dumper);
-        //}
+            var dumper = DumperBase.DumpInitlizationCode(se);
+
+            Assert.Equal("", dumper);
+        }
 
         [Fact]
         public void Can_dump_List()
