@@ -3,133 +3,110 @@ using System.Collections;
 using System.Collections.Generic;
 using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
 using MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers;
+using System.Linq;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
     public abstract class DumperBase
     {
+        internal static readonly string SetValueMethod = "public static void SetValue<T>(object obj, string propName, T val) { if (obj == null) throw new ArgumentNullException(\"obj\"); var t = obj.GetType(); if (t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) != null) { t.InvokeMember(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, null, obj, new object[] { val }); } else { FieldInfo fi = null; while (fi == null && t != null) { fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); t = t.BaseType; } if (fi == null) throw new ArgumentOutOfRangeException(\"propName\", string.Format(\"Field {0} was not found in Type {1}\", propName, obj.GetType().FullName)); fi.SetValue(obj, val); } }";
         internal readonly object Element;
-        internal readonly DumperBase Parent;
+        
         internal string ElementName { get; set; }
 
+        internal static List<Type> SkipTypes;
         internal static Dictionary<int, string> _foundElements;
         internal static int ObjectCounter { get; set; }
+        internal static bool DumpPublicOnly { get; set; }
 
-        protected DumperBase(DumperBase parent, object element, string name)
+        protected DumperBase(object element, string name)
         {
-            Parent = parent;
             Element = element;
             ElementName = name;
         }
 
-        internal abstract void AddPublicMember(CodeBuilder codeBuilder);
-        internal abstract void AddPrivateMember(CodeBuilder codeBuilder);
-
-        public static string DumpInitilizationCodeMethodAndSetValueMethod(object o)
+        static DumperBase()
         {
-            var createMethod = DumpInitilizationCodeMethod(o);
-
-            const string setValueMethod = "public static void SetValue<T>(object obj, string propName, T val) { if (obj == null) throw new ArgumentNullException(\"obj\"); var t = obj.GetType(); if (t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) != null) { t.InvokeMember(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, null, obj, new object[] { val }); } else { FieldInfo fi = null; while (fi == null && t != null) { fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); t = t.BaseType; } if (fi == null) throw new ArgumentOutOfRangeException(\"propName\", string.Format(\"Field {0} was not found in Type {1}\", propName, obj.GetType().FullName)); fi.SetValue(obj, val); } }";
-
-            return string.Format("{0}{1}{2}", createMethod, Environment.NewLine, setValueMethod);
+            SkipTypes = CfgLoader.GetHardCodedSkipTypes();    
         }
+
+        public abstract void ResolveInitCode(CodeBuilder codeBuilder);
         
-        public static string DumpInitilizationCodeMethod(object o)
+        public static string DumpCode(object o, DumpMode mode, Visibility visibility)
         {
             if (o == null) return "First object can not be null.";
 
-            var dumper = InitDumper(o);
+            if (ShouldSkipType(o)) return "In skip types list.";
+
+            ResetDumper(visibility);
+
+            var dumper = GetDumper(o, ResolveTypeName(o.GetType()).ToLower());
 
             var codeBuilder = new CodeBuilder();
 
-            var code = string.Empty;
+            dumper.ResolveInitCode(codeBuilder);
 
-            var objectDumper = dumper as AbstractComplexTypeDumper;
+            var code = codeBuilder.ToString();
 
-            if (objectDumper != null)
+            if (mode == DumpMode.WrappedCode || mode == DumpMode.WrappedCodeAndMethod)
             {
-                objectDumper.AddPublicMember(codeBuilder);
-
-                code = codeBuilder.ToString();
+                code = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.Element.GetType().Name, dumper.ElementName, Environment.NewLine, code, Environment.NewLine, dumper.ElementName, Environment.NewLine);
             }
 
-            var oneLineDumper = dumper as AbstractOneLineInitDumper;
-
-            if (oneLineDumper != null)
+            if (mode == DumpMode.WrappedCodeAndMethod)
             {
-                code = oneLineDumper.PublicOneLineInitCode();
+                code = string.Format("{0}{1}{2}", code, Environment.NewLine, SetValueMethod);
             }
 
-            var completeCreateMethod = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.Element.GetType().Name, dumper.ElementName, Environment.NewLine, code, Environment.NewLine, dumper.ElementName, Environment.NewLine);
-
-            return completeCreateMethod;
+            return code;
         }
 
-        public static string DumpInitlizationCode(object o)
+        public static void ResetDumper(Visibility visibility)
         {
-            if (o == null) return "First object can not be null.";
-
-            var dumper = InitDumper(o);
-
-            var codeBuilder = new CodeBuilder();
-
-            var code = string.Empty;
-
-            var objectDumper = dumper as AbstractComplexTypeDumper;
-
-            if (objectDumper != null)
+            if (visibility == Visibility.PublicOnly)
             {
-                objectDumper.AddPublicMember(codeBuilder);
-
-                code = codeBuilder.ToString();
+                DumpPublicOnly = true;
+            }
+            if (visibility == Visibility.PrivateAndPublic)
+            {
+                DumpPublicOnly = false;
             }
 
-            var oneLineDumper = dumper as AbstractOneLineInitDumper;
-
-            if (oneLineDumper != null)
-            {
-                code = oneLineDumper.PublicOneLineInitCode();
-            }
-
-            return string.Format("{0}", code);
-        }
-
-        private static DumperBase InitDumper(object o)
-        {
             _foundElements = new Dictionary<int, string>();
 
             ObjectCounter = 0;
-
-            var name = ResolveTypeName(o.GetType()).ToLower();
-
-            var dumper = GetDumper(null, o, name);
-
-            return dumper;
         }
 
-        internal static DumperBase GetDumper(DumperBase parent, object o, string name)
+        internal static bool ShouldSkipType(object o)
         {
+            return SkipTypes.Any(skipType => skipType == o.GetType());
+        }
+
+        public static DumperBase GetDumper( object o, string name)
+        {
+            if (o == null) return null;
+
             var type = o.GetType();
 
-            if (o is Guid) return new GuidTypeDumper(parent, o, name);
+            if (o is Guid) return new GuidTypeDumper(o, name);
 
-            if (o is DateTime) return new DateTimeTypeDumper(parent, o, name);
+            if (o is DateTime) return new DateTimeTypeDumper(o, name);
 
-            if (o is Enum) return new EnumTypeDumper(parent, o, name);
+            if (o is Enum) return new EnumTypeDumper(o, name);
 
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(parent, o, name);
+            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(o, name); //Struct
 
-            if (o is ValueType) return new ValueTypeDumper(parent, o, name);
+            if (o is ValueType) return new ValueTypeDumper(o, name);
 
-            if (o is string) return new StringTypeDumper(parent, o, name);
+            if (o is string) return new StringTypeDumper(o, name);
 
-            if (o is Array) return new ArrayTypeDumper(parent, o , name);
+            if (o is Array) return new ArrayTypeDumper(o , name);
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryTypeDumper(parent, o, name);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryTypeDumper(o, name);
 
-            if (o is IEnumerable) return new EnumerableTypeDumper(parent, o, name);
+            if (o is IEnumerable) return new EnumerableTypeDumper(o, name);
 
-            return new ObjectTypeDumper(parent, o, name);
+            return new ObjectTypeDumper(o, name);
         }
 
         internal static string ResolveTypeName(Type type)
@@ -141,5 +118,18 @@ namespace MockDataDebugVisualizer.InitCodeDumper
         {
             return type.GetGenericArguments().Length != 0;
         }
+    }
+
+    public enum DumpMode
+    {
+        CodeOnly = 0,
+        WrappedCode = 1,
+        WrappedCodeAndMethod = 2,
+    }
+
+    public enum Visibility
+    {
+        PrivateAndPublic = 0,
+        PublicOnly = 1
     }
 }

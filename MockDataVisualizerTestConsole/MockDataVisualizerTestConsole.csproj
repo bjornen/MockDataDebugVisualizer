@@ -11,7 +11,8 @@
     <RootNamespace>MockDataVisualizerTestConsole</RootNamespace>
     <AssemblyName>MockDataVisualizerTestConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -52,17 +53,26 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtentions.cs" />
-    <Compile Include="Tests\ObjectCreateCodeDumperTests.cs" />
-    <Compile Include="Tests\TestObjects\Bar.cs" />
-    <Compile Include="Tests\TestObjects\EnumObject.cs" />
-    <Compile Include="Tests\TestObjects\Foo.cs" />
-    <Compile Include="Tests\TestObjects\IServicedEntity.cs" />
-    <Compile Include="Tests\TestObjects\NonParameterlessCtorObj.cs" />
-    <Compile Include="Tests\TestObjects\PrivateCtorObject.cs" />
-    <Compile Include="Tests\TestObjects\Root.cs" />
-    <Compile Include="Tests\TestObjects\ServiceObject.cs" />
-    <Compile Include="Tests\TestObjects\StructObj.cs" />
-    <Compile Include="Tests\TestObjects\BoolObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\ArrayTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\DictionaryTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\EnumerableTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\ObjectTypeDumperTests.cs" />
+    <Compile Include="Tests\DumperAbstractTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\DateTimeTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\EnumTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\GuidTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\StringTypeDumperTests.cs" />
+    <Compile Include="Tests\OneLineInitDumpersTests\ValueTypeDumperTests.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Bar.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\EnumObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Foo.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\IServicedEntity.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\NonParameterlessCtorObj.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\PrivateCtorObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\Root.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\ServiceObject.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\StructObj.cs" />
+    <Compile Include="Tests\ComplexTypeDumpersTests\TestObjects\BoolObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MockDataVisualizer\MockDataDebugVisualizer.csproj">
@@ -71,6 +81,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

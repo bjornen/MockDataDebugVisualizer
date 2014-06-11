@@ -7,16 +7,16 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ObjectTypeDumper : AbstractComplexTypeDumper
     {
-        private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance); } } // use .OrderBy(x => x.Name); to make unit tests work
+        private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).OrderByDescending(x => x.Name); } } // use .OrderBy(x => x.Name); to make unit tests work
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        internal ObjectTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
+        internal ObjectTypeDumper(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
             var typeName = ResolveInitTypeName(Element.GetType());
 
-            if (Element.GetType().GetConstructor(Type.EmptyTypes) == null)
+            if (Element.GetType().GetConstructor(Type.EmptyTypes) == null && !(Element.GetType().IsValueType && !Element.GetType().IsEnum)) //No public constructors or not struct
             {
                 codeBuilder.AddCode(string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName));
             }
@@ -28,30 +28,45 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
         public override void ResolveMembers(CodeBuilder codeBuilder)
         {
+            if (Members == null) return;
+
             foreach (var member in Members)
             {
-                var memberValue = GetMemberValue(member);
-
-                if (memberValue == null) continue;
-
-                var dumper = GetDumper(this, memberValue, member.Name);
-
-                dumper.AddPublicMember(codeBuilder);
-
-                if (IsPublicAndWriteable(member))
+                try
                 {
-                    codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
+                    var memberValue = GetMemberValue(member);
+
+                    if (!IsDumpable(memberValue)) continue;
+
+                    var dumper = GetDumper(memberValue, member.Name);
+
+                    dumper.ResolveInitCode(codeBuilder);
+
+                    if (IsPublicMember(member))
+                    {
+                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
+                    }
+                    else if (CanWriteToMember(member) && !DumpPublicOnly)
+                    {
+                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
+                    }
                 }
-                else if (CanWriteToMember(member))
-                {
-                    codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
-                }
+                catch(Exception){} //Dump the rest of the members anyway
             }
         }
 
-        private bool IsPublicAndWriteable(MemberInfo member)
+        private bool IsPublicMember(MemberInfo member)
         {
-            return IsMemberPublic(member) && CanWriteToMemberWithSetter(member);
+            return PublicMembers.Contains(member) && CanWriteToMemberWithSetter(member);
+        }
+
+        private static bool IsDumpable(object obj)
+        {
+            if (obj == null) return false;
+
+            if (ShouldSkipType(obj)) return false;
+
+            return obj.GetType().IsVisible;
         }
 
         private object GetMemberValue(MemberInfo member)
@@ -66,11 +81,6 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             if (fieldInfo == null && propertyInfo == null) return null;
 
             return fieldInfo != null ? fieldInfo.GetValue(Element) : propertyInfo.GetValue(Element, null);
-        }
-
-        private bool IsMemberPublic(MemberInfo member)
-        {
-            return PublicMembers.Contains(member);
         }
 
         private static bool CanWriteToMember(MemberInfo member)

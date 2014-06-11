@@ -1,5 +1,5 @@
 ﻿
-namespace MockDataVisualizerTestConsole.Tests.TestObjects
+namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects
 {
     public class BoolObject
     {

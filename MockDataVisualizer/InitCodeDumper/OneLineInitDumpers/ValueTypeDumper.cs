@@ -2,11 +2,11 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
-    public class ValueTypeDumper : AbstractOneLineInitDumper
+    public class ValueTypeDumper : DumperBase
     {
-        public ValueTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name){}
+        public ValueTypeDumper(object element, string name) : base(element, name){}
 
-        public override string PublicOneLineInitCode()
+        public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
             var value = string.Format("{0}", Convert.ToString(Element).ToLower());
 
@@ -28,7 +28,19 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
             if (Element is decimal)
                 value = string.Format("{0}M", value);
 
-            return value;
+            if (Element is short)
+                value = string.Format("(short){0}", value);
+
+            if (Element is ushort)
+                value = string.Format("(ushort){0}", value);
+
+            if (Element is byte)
+                value = string.Format("(byte){0}", value);
+
+            if (Element is sbyte)
+                value = string.Format("(sbyte){0}", value);
+
+            codeBuilder.PushInitValue(value);
         }
     }
 }

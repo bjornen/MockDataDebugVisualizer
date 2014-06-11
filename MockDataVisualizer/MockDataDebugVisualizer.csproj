@@ -42,17 +42,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CfgLoader.cs" />
     <Compile Include="DebugVisualizers\InitCodeMethod\InitCodeMethodObjectSource.cs" />
     <Compile Include="DebugVisualizers\InitCodeMethod\InitCodeMethodVisualizer.cs" />
+    <Compile Include="DebugVisualizers\InitCode\InitCodePublicOnlyVisualizer.cs" />
+    <Compile Include="DebugVisualizers\InitCode\InitCodePublicOnlyObjectSource.cs" />
     <Compile Include="DebugVisualizers\InitCode\InitCodeObjectSource.cs" />
     <Compile Include="DebugVisualizers\InitCode\InitCodeVisualizer.cs" />
     <Compile Include="DebugVisualizers\AbstractMockDataObjectSource.cs" />
     <Compile Include="DebugVisualizers\AbstractMockDataVisualizer.cs" />
     <Compile Include="InitCodeDumper\CodeBuilder.cs" />
     <Compile Include="InitCodeDumper\AbstractComplexTypeDumper.cs" />
-    <Compile Include="InitCodeDumper\AbstractOneLineInitDumper.cs" />
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\ArrayTypeDumper.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\DateTimeTypeDumper.cs" />
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\DictionaryTypeDumper.cs" />
@@ -71,6 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Skip.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

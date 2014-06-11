@@ -4,7 +4,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class DictionaryTypeDumper : AbstractComplexTypeDumper
     {
-        public DictionaryTypeDumper(DumperBase parent, object element, string name) : base(parent, element, name) { }
+        public DictionaryTypeDumper(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
@@ -30,15 +30,15 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 dynamic keyValue = element;
 
-                var keyDumper = GetDumper(this, keyValue.Key, keyValue.Key.GetType().Name);
+                var keyDumper = GetDumper(keyValue.Key, keyValue.Key.GetType().Name);
 
-                var valueDumper = GetDumper(this, keyValue.Value, keyValue.Value.GetType().Name);
+                var valueDumper = GetDumper(keyValue.Value, keyValue.Value.GetType().Name);
 
-                keyDumper.AddPublicMember(codeBuilder);
+                keyDumper.ResolveInitCode(codeBuilder);
 
                 var line = string.Format("{0}.Add({1},", ElementName, codeBuilder.PopInitValue());
 
-                valueDumper.AddPublicMember(codeBuilder);
+                valueDumper.ResolveInitCode(codeBuilder);
    
                 line = string.Format("{0} {1});", line, codeBuilder.PopInitValue());
 

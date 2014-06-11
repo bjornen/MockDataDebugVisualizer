@@ -5,7 +5,8 @@ using MockDataDebugVisualizer.DebugVisualizers.InitCode;
 using MockDataDebugVisualizer.DebugVisualizers.InitCodeMethod;
 using MockDataDebugVisualizer.DebugVisualizers.InitCodeMethodSetValue;
 using MockDataVisualizerTestConsole.Tests;
-using MockDataVisualizerTestConsole.Tests.TestObjects;
+using MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests;
+using MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects;
 
 namespace MockDataVisualizerTestConsole
 {
@@ -17,7 +18,7 @@ namespace MockDataVisualizerTestConsole
             Root createroot0 = Createroot_0();
 
             Root root =
-                ObjectCreateCodeDumperTests
+                ObjectTypeDumperTests
                     .ComplexRootWithPrivateMembersAndInterfacesWithPrivateMembersAndCircularReferenceAndPrivateObjectMemberAndSingleArgumentEnumerableAndPrivateEnumerable
                     ();
 
