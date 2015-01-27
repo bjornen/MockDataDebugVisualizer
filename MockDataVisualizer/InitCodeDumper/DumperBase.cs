@@ -94,7 +94,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (o is Enum) return new EnumTypeDumper(o, name);
 
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive && type != typeof(decimal)) return new ObjectTypeDumper(o, name); //Struct
+            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive) return new ObjectTypeDumper(o, name); //Struct
 
             if (o is ValueType) return new ValueTypeDumper(o, name);
 

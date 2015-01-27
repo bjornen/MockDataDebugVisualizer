@@ -16,7 +16,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
         {
             var typeName = ResolveInitTypeName(Element.GetType());
 
-            if (Element.GetType().GetConstructor(Type.EmptyTypes) == null && !(Element.GetType().IsValueType && !Element.GetType().IsEnum)) //No public constructors or not struct
+            if (Element.GetType().GetConstructor(Type.EmptyTypes) == null && !Element.GetType().IsValueType) //No public constructors or not struct
             {
                 codeBuilder.AddCode(string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName));
             }
@@ -51,6 +51,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
                         codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
                     }
                 }
+
                 catch(Exception){} //Dump the rest of the members anyway
             }
         }
