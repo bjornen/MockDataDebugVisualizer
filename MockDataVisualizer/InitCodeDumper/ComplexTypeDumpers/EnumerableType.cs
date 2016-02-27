@@ -2,9 +2,9 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
-    public class EnumerableTypeDumper : AbstractComplexTypeDumper
+    public class EnumerableType : AbstractComplexType
     {
-        public EnumerableTypeDumper(object element, string name) : base(element, name) { }
+        public EnumerableType(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {

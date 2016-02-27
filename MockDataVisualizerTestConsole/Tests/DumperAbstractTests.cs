@@ -30,7 +30,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(i, "ShouldCreateCorrectDumperForValueType");
 
-            Assert.IsType<ValueTypeDumper>(dumper);
+            Assert.IsType<MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers.ValueType>(dumper);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(guid, "ShouldCreateCorrectDumperForGuid");
 
-            Assert.IsType<GuidTypeDumper>(dumper);
+            Assert.IsType<GuidType>(dumper);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(dt, "ShouldCreateCorrectDumperForDateTime");
 
-            Assert.IsType<DateTimeTypeDumper>(dumper);
+            Assert.IsType<DateTimeType>(dumper);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(c, "ShouldCreateCorrectDumperForEnum");
 
-            Assert.IsType<EnumTypeDumper>(dumper);
+            Assert.IsType<EnumType>(dumper);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(s, "ShouldCreateCorrectDumperForStruct");
 
-            Assert.IsType<ObjectTypeDumper>(dumper);
+            Assert.IsType<ObjectType>(dumper);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(str, "ShouldCreateCorrectDumperForString");
 
-            Assert.IsType<StringTypeDumper>(dumper);
+            Assert.IsType<StringType>(dumper);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(arr, "ShouldCreateCorrectDumperForArray");
 
-            Assert.IsType<ArrayTypeDumper>(dumper);
+            Assert.IsType<ArrayType>(dumper);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(dic, "ShouldCreateCorrectDumperForDictionary");
 
-            Assert.IsType<DictionaryTypeDumper>(dumper);
+            Assert.IsType<DictionaryType>(dumper);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(list, "ShouldCreateCorrectDumperForValueType");
 
-            Assert.IsType<EnumerableTypeDumper>(dumper);
+            Assert.IsType<EnumerableType>(dumper);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace MockDataVisualizerTestConsole.Tests
 
             var dumper = DumperBase.GetDumper(o, "ShouldCreateCorrectDumperForObject");
 
-            Assert.IsType<ObjectTypeDumper>(dumper);
+            Assert.IsType<ObjectType>(dumper);
         }
     }
 }

@@ -5,12 +5,12 @@ using System.Reflection;
 
 namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
-    public class ObjectTypeDumper : AbstractComplexTypeDumper
+    public class ObjectType : AbstractComplexType
     {
         private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).OrderByDescending(x => x.Name); } } // use .OrderBy(x => x.Name); to make unit tests work
         private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
 
-        internal ObjectTypeDumper(object element, string name) : base(element, name) { }
+        internal ObjectType(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {

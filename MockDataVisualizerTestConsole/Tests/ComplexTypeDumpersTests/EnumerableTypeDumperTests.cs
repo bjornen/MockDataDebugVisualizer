@@ -14,7 +14,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
             
             var list = new List<int> { 1, 2, 3 };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpValueTypeList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpValueTypeList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -30,7 +30,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
             
             var list = new List<string> { "1", "2", "3" };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpStringList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpStringList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -46,7 +46,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var list = new List<ListTestClass> { new ListTestClass(1), new ListTestClass(2), new ListTestClass(3) };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpObjectList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpObjectList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -62,7 +62,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var list = new List<int> { 1, 2, 3 };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpMembersForValueTypeList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpMembersForValueTypeList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -78,7 +78,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var list = new List<string> { "1", "2", "3" };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpMembersForStringList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpMembersForStringList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -94,7 +94,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var list = new List<ListTestClass> { new ListTestClass(1), new ListTestClass(2), new ListTestClass(3) };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpMembersForObjectList");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpMembersForObjectList");
             
             var codeBuilder = new CodeBuilder();
 
@@ -110,7 +110,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var list = new List<ListTestClass> { new ListTestClass(1), null, new ListTestClass(3) };
 
-            var dumper = new EnumerableTypeDumper(list, "ShouldBeAbleToDumpMembersForObjectListContainingNull");
+            var dumper = new EnumerableType(list, "ShouldBeAbleToDumpMembersForObjectListContainingNull");
 
             var codeBuilder = new CodeBuilder();
 

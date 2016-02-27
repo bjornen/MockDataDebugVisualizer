@@ -251,7 +251,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
 
             var obj = new Root();
 
-            var initName = ObjectTypeDumper.ResolveInitTypeName(obj.GetType());
+            var initName = ObjectType.ResolveInitTypeName(obj.GetType());
 
             Assert.Equal("Root", initName);
         }

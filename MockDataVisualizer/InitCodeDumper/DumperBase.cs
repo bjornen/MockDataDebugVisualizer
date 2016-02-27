@@ -88,25 +88,25 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             var type = o.GetType();
 
-            if (o is Guid) return new GuidTypeDumper(o, name);
+            if (o is Guid) return new GuidType(o, name);
 
-            if (o is DateTime) return new DateTimeTypeDumper(o, name);
+            if (o is DateTime) return new DateTimeType(o, name);
 
-            if (o is Enum) return new EnumTypeDumper(o, name);
+            if (o is Enum) return new EnumType(o, name);
 
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive) return new ObjectTypeDumper(o, name); //Struct
+            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive) return new ObjectType(o, name); //Struct
 
-            if (o is ValueType) return new ValueTypeDumper(o, name);
+            if (o is System.ValueType) return new OneLineInitDumpers.ValueType(o, name);
 
-            if (o is string) return new StringTypeDumper(o, name);
+            if (o is string) return new StringType(o, name);
 
-            if (o is Array) return new ArrayTypeDumper(o , name);
+            if (o is Array) return new ArrayType(o , name);
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryTypeDumper(o, name);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryType(o, name);
 
-            if (o is IEnumerable) return new EnumerableTypeDumper(o, name);
+            if (o is IEnumerable) return new EnumerableType(o, name);
 
-            return new ObjectTypeDumper(o, name);
+            return new ObjectType(o, name);
         }
 
         internal static string ResolveTypeName(Type type)

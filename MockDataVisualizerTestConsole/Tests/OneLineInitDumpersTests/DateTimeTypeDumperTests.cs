@@ -14,7 +14,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
             
             var dateTime = new DateTime(2014, 06, 06, 12, 0, 0);
 
-            var dumper = new DateTimeTypeDumper(dateTime, "ShouldBeAbleToDumpDateTime");
+            var dumper = new DateTimeType(dateTime, "ShouldBeAbleToDumpDateTime");
             
             var codeBuilder = new CodeBuilder();
 

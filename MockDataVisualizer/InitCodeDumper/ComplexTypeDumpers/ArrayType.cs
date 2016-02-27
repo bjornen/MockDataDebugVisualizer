@@ -3,11 +3,11 @@ using System.Collections;
 
 namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
-    public class ArrayTypeDumper : AbstractComplexTypeDumper
+    public class ArrayType : AbstractComplexType
     {
         private readonly int _arrayLength;
 
-        public ArrayTypeDumper(object element, string name) : base(element, name)
+        public ArrayType(object element, string name) : base(element, name)
         {
             _arrayLength = (Element as Array).Length;
         }

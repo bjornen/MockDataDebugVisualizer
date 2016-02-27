@@ -2,9 +2,9 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
-    public class DictionaryTypeDumper : AbstractComplexTypeDumper
+    public class DictionaryType : AbstractComplexType
     {
-        public DictionaryTypeDumper(object element, string name) : base(element, name) { }
+        public DictionaryType(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {

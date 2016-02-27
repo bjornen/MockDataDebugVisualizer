@@ -2,9 +2,9 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
-    public class ValueTypeDumper : DumperBase
+    public class ValueType : DumperBase
     {
-        public ValueTypeDumper(object element, string name) : base(element, name){}
+        public ValueType(object element, string name) : base(element, name){}
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {

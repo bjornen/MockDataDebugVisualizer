@@ -14,7 +14,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
 
             var guid = Guid.Parse("672DA660-2431-4532-B0EC-28B483A57D73");
 
-            var dumper = new GuidTypeDumper(guid, "ShouldBeAbleToDumpGuid");
+            var dumper = new GuidType(guid, "ShouldBeAbleToDumpGuid");
 
             var codeBuilder = new CodeBuilder();
 

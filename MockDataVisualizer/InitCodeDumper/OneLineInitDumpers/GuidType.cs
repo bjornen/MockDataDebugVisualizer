@@ -1,8 +1,8 @@
 ﻿namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
-    public class GuidTypeDumper : DumperBase
+    public class GuidType : DumperBase
     {
-        public GuidTypeDumper(object element, string name) : base(element, name) { }
+        public GuidType(object element, string name) : base(element, name) { }
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {

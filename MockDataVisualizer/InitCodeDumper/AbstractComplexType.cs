@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
 {
-    public abstract class AbstractComplexTypeDumper : DumperBase
+    public abstract class AbstractComplexType : DumperBase
     {
-        protected AbstractComplexTypeDumper(object element, string name) : base(element, name)
+        protected AbstractComplexType(object element, string name) : base(element, name)
         {
             var typeName = name;
 

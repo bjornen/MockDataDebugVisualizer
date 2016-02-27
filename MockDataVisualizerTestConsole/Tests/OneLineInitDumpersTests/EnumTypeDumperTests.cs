@@ -13,7 +13,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
 
             var e = TestEnum.te1;
 
-            var dumper = new EnumTypeDumper(e, "ShouldBeAbleToDumpEnumFirstValue");
+            var dumper = new EnumType(e, "ShouldBeAbleToDumpEnumFirstValue");
 
             var codeBuilder = new CodeBuilder();
 
@@ -29,7 +29,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
 
             var e = TestEnum.te2;
 
-            var dumper = new EnumTypeDumper(e, "ShouldBeAbleToDumpEnumSecondValue");
+            var dumper = new EnumType(e, "ShouldBeAbleToDumpEnumSecondValue");
 
             var codeBuilder = new CodeBuilder();
 
@@ -45,7 +45,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
 
             var e = TestEnum2.te21;
 
-            var dumper = new EnumTypeDumper(e, "ShouldBeAbleToDumpEnumFirstValueNoNumericValueSpecified");
+            var dumper = new EnumType(e, "ShouldBeAbleToDumpEnumFirstValueNoNumericValueSpecified");
 
             var codeBuilder = new CodeBuilder();
 
@@ -61,7 +61,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
 
             var e = TestEnum2.te22;
 
-            var dumper = new EnumTypeDumper(e, "ShouldBeAbleToDumpEnumSecondValueNoNumericValueSpecified");
+            var dumper = new EnumType(e, "ShouldBeAbleToDumpEnumSecondValueNoNumericValueSpecified");
 
             var codeBuilder = new CodeBuilder();
 

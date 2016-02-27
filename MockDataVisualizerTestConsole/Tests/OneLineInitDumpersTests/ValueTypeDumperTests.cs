@@ -11,7 +11,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9, "ShouldBeAbleToDumpInt");
+            var dumper = new ValueType(9, "ShouldBeAbleToDumpInt");
 
             var codeBuilder = new CodeBuilder();
 
@@ -25,7 +25,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9.2D, "ShouldBeAbleToDumpDouble");
+            var dumper = new ValueType(9.2D, "ShouldBeAbleToDumpDouble");
 
             var codeBuilder = new CodeBuilder();
 
@@ -39,7 +39,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9U, "ShouldBeAbleToDumpUint");
+            var dumper = new ValueType(9U, "ShouldBeAbleToDumpUint");
 
             var codeBuilder = new CodeBuilder();
 
@@ -53,7 +53,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9UL, "ShouldBeAbleToDumpULong");
+            var dumper = new ValueType(9UL, "ShouldBeAbleToDumpULong");
 
             var codeBuilder = new CodeBuilder();
 
@@ -67,7 +67,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9.2F, "ShouldBeAbleToDumpFloat");
+            var dumper = new ValueType(9.2F, "ShouldBeAbleToDumpFloat");
 
             var codeBuilder = new CodeBuilder();
 
@@ -81,7 +81,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper(9.2M, "ShouldBeAbleToDumpDecimal");
+            var dumper = new ValueType(9.2M, "ShouldBeAbleToDumpDecimal");
 
             var codeBuilder = new CodeBuilder();
 
@@ -95,7 +95,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper((short)9, "ShouldBeAbleToDumpShort");
+            var dumper = new ValueType((short)9, "ShouldBeAbleToDumpShort");
 
             var codeBuilder = new CodeBuilder();
 
@@ -109,7 +109,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper((ushort)9, "ShouldBeAbleToDumpUShort");
+            var dumper = new ValueType((ushort)9, "ShouldBeAbleToDumpUShort");
 
             var codeBuilder = new CodeBuilder();
 
@@ -123,7 +123,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper((byte)9, "ShouldBeAbleToDumpByte");
+            var dumper = new ValueType((byte)9, "ShouldBeAbleToDumpByte");
 
             var codeBuilder = new CodeBuilder();
 
@@ -137,7 +137,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new ValueTypeDumper((sbyte)9, "ShouldBeAbleToDumpSByte");
+            var dumper = new ValueType((sbyte)9, "ShouldBeAbleToDumpSByte");
 
             var codeBuilder = new CodeBuilder();
 

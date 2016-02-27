@@ -11,7 +11,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var array = new[] { "one", "two", "three" };
-            var dumper = new ArrayTypeDumper(array, "TestArray");
+            var dumper = new ArrayType(array, "TestArray");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -24,7 +24,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var array = new string[1];
-            var dumper = new ArrayTypeDumper(array, "TestArray");
+            var dumper = new ArrayType(array, "TestArray");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -37,7 +37,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var array = new[] { "one", "two", "three" };
-            var dumper = new ArrayTypeDumper(array, "TestArray");
+            var dumper = new ArrayType(array, "TestArray");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);
@@ -50,7 +50,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var array = new string[]{null, "two", "three"};
-            var dumper = new ArrayTypeDumper(array, "TestArray");
+            var dumper = new ArrayType(array, "TestArray");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);
@@ -63,7 +63,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var array = new string[] { null};
-            var dumper = new ArrayTypeDumper(array, "TestArray");
+            var dumper = new ArrayType(array, "TestArray");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);

@@ -2,9 +2,9 @@
 
 namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 {
-    public class DateTimeTypeDumper : DumperBase
+    public class DateTimeType : DumperBase
     {
-        public DateTimeTypeDumper(object element, string name) : base(element, name) {}
+        public DateTimeType(object element, string name) : base(element, name) {}
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {

@@ -11,7 +11,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new StringTypeDumper("a string", "ShouldBeAbleToDumpString");
+            var dumper = new StringType("a string", "ShouldBeAbleToDumpString");
 
             var codeBuilder = new CodeBuilder();
 
@@ -25,7 +25,7 @@ namespace MockDataVisualizerTestConsole.Tests.OneLineInitDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
 
-            var dumper = new StringTypeDumper(null, "ShouldBeAbleToDumpNullString");
+            var dumper = new StringType(null, "ShouldBeAbleToDumpNullString");
 
             var codeBuilder = new CodeBuilder();
 

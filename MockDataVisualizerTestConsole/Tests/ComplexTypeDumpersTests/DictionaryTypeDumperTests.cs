@@ -13,7 +13,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<string, string> {{"key1", "value1"}, {"key2", "value2"}};
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -26,7 +26,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<string, object> { { "key1", new Object() }, { "key2", "value2" } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -39,7 +39,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<object, string> { { new Object(), "value1" }, { "key2", "value2" } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -52,7 +52,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<object, object> { { new Object(), new Object() }, { "key2", new Object() } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveTypeInitilization(codeBuilder);
@@ -65,7 +65,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<object, object> { { new Object(), new Object() }, { "key2", new Object() } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);
@@ -78,7 +78,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);
@@ -91,7 +91,7 @@ namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests
         {
             DumperBase.ResetDumper(Visibility.PublicOnly);
             var dic = new Dictionary<int, string> { { 1, "value1" }, { 2, "value2" } };
-            var dumper = new DictionaryTypeDumper(dic, "TestDic");
+            var dumper = new DictionaryType(dic, "TestDic");
             var codeBuilder = new CodeBuilder();
 
             dumper.ResolveMembers(codeBuilder);
