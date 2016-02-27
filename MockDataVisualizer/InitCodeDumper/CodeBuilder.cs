@@ -36,7 +36,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             foreach (var line in CodeList)
             {
-                sb.Append(string.Format("{0}{1}", line.Trim(), Environment.NewLine));
+                sb.Append($"{line.Trim()}{Environment.NewLine}");
             }
 
             return sb.ToString().Trim(Environment.NewLine.ToCharArray());

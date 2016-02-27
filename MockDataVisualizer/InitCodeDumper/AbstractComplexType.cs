@@ -14,7 +14,17 @@ namespace MockDataDebugVisualizer.InitCodeDumper
                 typeName = ResolveTypeName(element.GetType());
             }
 
-            ElementName = string.Format("{0}_{1}", LowerCaseFirst(typeName), ObjectCounter++);
+            ElementName = $"{LowerCaseFirst(typeName)}_{ObjectCounter++}";
+        }
+
+        protected string MemberName
+        {
+            get
+            {
+                var typeName = Element.GetType().Name;
+
+                return typeName.Substring(0, typeName.Length - 2);
+            }
         }
 
         public abstract void ResolveTypeInitilization(CodeBuilder codeBuilder);
@@ -70,6 +80,11 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             {
                 _foundElements.Add(hash, ElementName);
             }
+        }
+
+        protected string GenericTypeName(int arg)
+        {
+            return Element.GetType().GetGenericArguments()[arg].Name;
         }
     }
 }

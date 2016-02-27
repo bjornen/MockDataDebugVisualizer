@@ -8,37 +8,37 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
-            var value = string.Format("{0}", Convert.ToString(Element).ToLower());
+            var value = $"{Convert.ToString(Element).ToLower()}";
 
             if (value.Contains(","))
-                value = string.Format("{0}", value.Replace(',', '.'));
+                value = $"{value.Replace(',', '.')}";
 
             if (Element is uint)
-                value = string.Format("{0}U", value);
+                value = $"{value}U";
 
             if (Element is ulong)
-                value = string.Format("{0}UL", value);
+                value = $"{value}UL";
 
             if (Element is float)
-                value = string.Format("{0}F", value);
+                value = $"{value}F";
 
             if (Element is double)
-                value = string.Format("{0}D", value);
+                value = $"{value}D";
 
             if (Element is decimal)
-                value = string.Format("{0}M", value);
+                value = $"{value}M";
 
             if (Element is short)
-                value = string.Format("(short){0}", value);
+                value = $"(short){value}";
 
             if (Element is ushort)
-                value = string.Format("(ushort){0}", value);
+                value = $"(ushort){value}";
 
             if (Element is byte)
-                value = string.Format("(byte){0}", value);
+                value = $"(byte){value}";
 
             if (Element is sbyte)
-                value = string.Format("(sbyte){0}", value);
+                value = $"(sbyte){value}";
 
             codeBuilder.PushInitValue(value);
         }

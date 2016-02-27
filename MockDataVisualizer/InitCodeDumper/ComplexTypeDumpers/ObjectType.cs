@@ -22,7 +22,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             }
             else
             {
-                codeBuilder.AddCode(string.Format("var {0} = new {1}();", ElementName, typeName));
+                codeBuilder.AddCode($"var {ElementName} = new {typeName}();");
             }
         }
 
@@ -42,17 +42,22 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                     dumper.ResolveInitCode(codeBuilder);
 
-                    if (IsPublicMember(member))
-                    {
-                        codeBuilder.AddCode(string.Format("{0}.{1} = {2};", ElementName, member.Name, codeBuilder.PopInitValue()));
-                    }
-                    else if (CanWriteToMember(member) && !DumpPublicOnly)
-                    {
-                        codeBuilder.AddCode(string.Format("SetValue({0}, \"{1}\", {2});", ElementName, member.Name, codeBuilder.PopInitValue()));
-                    }
+                    WriteMemberInitCode(codeBuilder, member);
                 }
 
                 catch(Exception){} //Dump the rest of the members anyway
+            }
+        }
+
+        private void WriteMemberInitCode(CodeBuilder codeBuilder, MemberInfo member)
+        {
+            if (IsPublicMember(member))
+            {
+                codeBuilder.AddCode($"{ElementName}.{member.Name} = {codeBuilder.PopInitValue()};");
+            }
+            else if (CanWriteToMember(member) && !DumpPublicOnly)
+            {
+                codeBuilder.AddCode($"SetValue({ElementName}, \"{member.Name}\", {codeBuilder.PopInitValue()});");
             }
         }
 
@@ -100,7 +105,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
         {
             var propertyInfo = member as PropertyInfo;
 
-            if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+            if (propertyInfo?.GetSetMethod() != null)
             {
                 return propertyInfo.CanWrite;
             }
@@ -116,7 +121,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 var argumentInitName = ResolveInitTypeName(argumentType);
 
-                initTypeName = string.Format("{0}<{1}>", initTypeName, argumentInitName);
+                initTypeName = $"{initTypeName}<{argumentInitName}>";
             }
 
             return initTypeName;

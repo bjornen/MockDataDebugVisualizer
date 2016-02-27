@@ -6,7 +6,7 @@
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
-            codeBuilder.PushInitValue(string.Format("Guid.Parse(\"{0}\")", Element));
+            codeBuilder.PushInitValue($"Guid.Parse(\"{Element}\")");
         }
     }
 }

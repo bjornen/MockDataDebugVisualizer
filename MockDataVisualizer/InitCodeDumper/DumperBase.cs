@@ -50,12 +50,12 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (mode == DumpMode.WrappedCode || mode == DumpMode.WrappedCodeAndMethod)
             {
-                code = string.Format("public static {0} Create{1}(){{{2}{3}{4}return {5};{6}}}", dumper.Element.GetType().Name, dumper.ElementName, Environment.NewLine, code, Environment.NewLine, dumper.ElementName, Environment.NewLine);
+                code = $"public static {dumper.Element.GetType().Name} Create{dumper.ElementName}(){{{Environment.NewLine}{code}{Environment.NewLine}return {dumper.ElementName};{Environment.NewLine}}}";
             }
 
             if (mode == DumpMode.WrappedCodeAndMethod)
             {
-                code = string.Format("{0}{1}{2}", code, Environment.NewLine, SetValueMethod);
+                code = $"{code}{Environment.NewLine}{SetValueMethod}";
             }
 
             return code;

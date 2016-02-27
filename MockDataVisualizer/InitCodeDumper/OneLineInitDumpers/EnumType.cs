@@ -8,7 +8,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers
 
         public override void ResolveInitCode(CodeBuilder codeBuilder)
         {
-            codeBuilder.PushInitValue(string.Format("{0}.{1}", Element.GetType().Name, Convert.ToString(Element)));
+            codeBuilder.PushInitValue($"{Element.GetType().Name}.{Convert.ToString(Element)}");
         }
     }
 }

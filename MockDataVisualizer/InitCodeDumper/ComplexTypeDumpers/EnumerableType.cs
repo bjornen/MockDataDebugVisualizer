@@ -10,16 +10,17 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
         {
             var genericArguments = Element.GetType().GetGenericArguments();
 
-            var typeName = Element.GetType().Name;
-
             if (genericArguments.Length == 1)
             {
-                var genericArgument = Element.GetType().GetGenericArguments()[0].Name;
-
-                var initCode = string.Format("var {0} = new {1}<{2}>();", ElementName, typeName.Substring(0, typeName.Length - 2), genericArgument);
+                var initCode = InitCode();
 
                 codeBuilder.AddCode(initCode);
             }
+        }
+
+        private string InitCode()
+        {
+            return $"var {ElementName} = new {MemberName}<{GenericTypeName(0)}>();";
         }
 
         public override void ResolveMembers(CodeBuilder codeBuilder)
@@ -34,7 +35,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 dumper.ResolveInitCode(codeBuilder);
 
-                codeBuilder.AddCode(string.Format("{0}.Add({1});", ElementName, codeBuilder.PopInitValue()));
+                codeBuilder.AddCode($"{ElementName}.Add({codeBuilder.PopInitValue()});");
             }
         }
     }

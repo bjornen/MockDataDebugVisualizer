@@ -5,25 +5,27 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ArrayType : AbstractComplexType
     {
-        private readonly int _arrayLength;
-
         public ArrayType(object element, string name) : base(element, name)
         {
-            _arrayLength = (Element as Array).Length;
         }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
             var genericArguments = Element.GetType().GetGenericArguments();
 
-            var typeName = Element.GetType().Name;
-
             if (genericArguments.Length == 0)
             {
-                var initCode = string.Format("var {0} = new {1}[{2}];", ElementName, typeName.Substring(0, typeName.Length - 2), _arrayLength);
+                var arrayLength = (Element as Array).Length;
+
+                var initCode = InitCode(arrayLength);
 
                 codeBuilder.AddCode(initCode);
             }
+        }
+
+        private string InitCode(int arrayLength)
+        {
+            return $"var {ElementName} = new {MemberName}[{arrayLength}];";
         }
 
         public override void ResolveMembers(CodeBuilder codeBuilder)
@@ -38,7 +40,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                 dumper.ResolveInitCode(codeBuilder);
 
-                codeBuilder.AddCode(string.Format("{0}[{1}] = {2};", ElementName, i, codeBuilder.PopInitValue()));
+                codeBuilder.AddCode($"{ElementName}[{i}] = {codeBuilder.PopInitValue()};");
             }
         }
     }
