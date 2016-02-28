@@ -7,24 +7,30 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 {
     public class ObjectType : AbstractComplexType
     {
-        private IEnumerable<MemberInfo> Members { get { return Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).OrderByDescending(x => x.Name); } } // use .OrderBy(x => x.Name); to make unit tests work
-        private IEnumerable<MemberInfo> PublicMembers { get { return Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance); } }
+        private IEnumerable<MemberInfo> Members => Element.GetType().GetMembers(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).OrderByDescending(x => x.Name);
+        private IEnumerable<MemberInfo> PublicMembers => Element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
 
         internal ObjectType(object element, string name) : base(element, name) { }
 
         public override void ResolveTypeInitilization(CodeBuilder codeBuilder)
         {
-            var typeName = ResolveInitTypeName(Element.GetType());
+            var typeName = ResolveInitTypeName(ElementType);
 
             if (Element.GetType().GetConstructor(Type.EmptyTypes) == null && !Element.GetType().IsValueType) //No public constructors or not struct
             {
-                codeBuilder.AddCode(string.Format("var {0} = ({1}) FormatterServices.GetUninitializedObject(typeof ({1}));", ElementName, typeName));
+                var initCode = $"var {ElementName} = ({typeName}) FormatterServices.GetUninitializedObject(typeof ({typeName}));";
+
+                codeBuilder.AddCode(initCode);
             }
             else
             {
-                codeBuilder.AddCode($"var {ElementName} = new {typeName}();");
+                var initCode = $"var {ElementName} = new {typeName}();";
+
+                codeBuilder.AddCode(initCode);
             }
         }
+
+        protected Type ElementType => Element.GetType();
 
         public override void ResolveMembers(CodeBuilder codeBuilder)
         {
@@ -38,7 +44,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
                     if (!IsDumpable(memberValue)) continue;
 
-                    var dumper = GetDumper(memberValue, member.Name);
+                    var dumper = DumperFactory.GetDumper(memberValue, member.Name);
 
                     dumper.ResolveInitCode(codeBuilder);
 
@@ -115,7 +121,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
 
         public static string ResolveInitTypeName(Type type)
         {
-            var initTypeName = ResolveTypeName(type);
+            var initTypeName = ResolveActualTypeName(type);
 
             foreach (var argumentType in type.GetGenericArguments())
             {

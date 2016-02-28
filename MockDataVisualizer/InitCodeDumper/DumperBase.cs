@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
-using MockDataDebugVisualizer.InitCodeDumper.OneLineInitDumpers;
 using System.Linq;
 
 namespace MockDataDebugVisualizer.InitCodeDumper
@@ -40,7 +37,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             ResetDumper(visibility);
 
-            var dumper = GetDumper(o, ResolveTypeName(o.GetType()).ToLower());
+            var dumper = DumperFactory.GetDumper(o, ResolveActualTypeName(o.GetType()).ToLower());
 
             var codeBuilder = new CodeBuilder();
 
@@ -82,54 +79,21 @@ namespace MockDataDebugVisualizer.InitCodeDumper
             return SkipTypes.Any(skipType => skipType == o.GetType());
         }
 
-        public static DumperBase GetDumper( object o, string name)
+        internal static string ResolveActualTypeName(Type type)
         {
-            if (o == null) return null;
+            var trueType = type;
 
-            var type = o.GetType();
+            if (type.BaseType != null && type.Namespace == "System.Data.Entity.DynamicProxies")
+            {
+                trueType = type.BaseType;
+            }
 
-            if (o is Guid) return new GuidType(o, name);
-
-            if (o is DateTime) return new DateTimeType(o, name);
-
-            if (o is Enum) return new EnumType(o, name);
-
-            if (type.IsValueType && !type.IsEnum && !type.IsPrimitive) return new ObjectType(o, name); //Struct
-
-            if (o is System.ValueType) return new OneLineInitDumpers.ValueType(o, name);
-
-            if (o is string) return new StringType(o, name);
-
-            if (o is Array) return new ArrayType(o , name);
-
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)) return new DictionaryType(o, name);
-
-            if (o is IEnumerable) return new EnumerableType(o, name);
-
-            return new ObjectType(o, name);
-        }
-
-        internal static string ResolveTypeName(Type type)
-        {
-            return IsGenericType(type) ? type.Name.Substring(0, type.Name.IndexOf('`')) : type.Name;
+            return IsGenericType(trueType) ? trueType.Name.Substring(0, trueType.Name.IndexOf('`')) : trueType.Name;
         }
 
         internal static bool IsGenericType(Type type)
         {
             return type.GetGenericArguments().Length != 0;
         }
-    }
-
-    public enum DumpMode
-    {
-        CodeOnly = 0,
-        WrappedCode = 1,
-        WrappedCodeAndMethod = 2,
-    }
-
-    public enum Visibility
-    {
-        PrivateAndPublic = 0,
-        PublicOnly = 1
     }
 }

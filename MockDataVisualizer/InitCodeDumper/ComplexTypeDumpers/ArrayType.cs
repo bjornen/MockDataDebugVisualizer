@@ -36,7 +36,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 if(elementList[i] == null) continue;
 
-                var dumper = GetDumper(elementList[i], elementList[i].GetType().Name);
+                var dumper = DumperFactory.GetDumper(elementList[i], elementList[i].GetType().Name);
 
                 dumper.ResolveInitCode(codeBuilder);
 

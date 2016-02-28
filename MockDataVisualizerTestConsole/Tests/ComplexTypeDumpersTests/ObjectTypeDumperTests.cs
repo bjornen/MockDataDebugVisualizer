@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using MockDataDebugVisualizer.InitCodeDumper;
+﻿using MockDataDebugVisualizer.InitCodeDumper;
 using MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers;
 using MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests.TestObjects;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Xunit;
 
 namespace MockDataVisualizerTestConsole.Tests.ComplexTypeDumpersTests

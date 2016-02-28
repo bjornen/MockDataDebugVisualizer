@@ -62,6 +62,8 @@
     <Compile Include="InitCodeDumper\CodeBuilder.cs" />
     <Compile Include="InitCodeDumper\AbstractComplexType.cs" />
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\ArrayType.cs" />
+    <Compile Include="InitCodeDumper\DumperFactory.cs" />
+    <Compile Include="InitCodeDumper\DumpMode.cs" />
     <Compile Include="InitCodeDumper\OneLineInitDumpers\DateTimeType.cs" />
     <Compile Include="InitCodeDumper\ComplexTypeDumpers\DictionaryType.cs" />
     <Compile Include="InitCodeDumper\DumperBase.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="InitCodeDumper\OneLineInitDumpers\ValueType.cs" />
     <Compile Include="DebugVisualizers\InitCodeMethodSetValue\InitCodeMethodSetValueObjectSource.cs" />
     <Compile Include="DebugVisualizers\InitCodeMethodSetValue\InitCodeMethodSetValueVisualizer.cs" />
+    <Compile Include="InitCodeDumper\Visibility.cs" />
     <Compile Include="ObjectTextDumper\ObjectDumper2.cs" />
     <Compile Include="ObjectTextDumper\ObjectTextDumper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,7 +91,7 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (
-xcopy "$(ProjectDir)bin\Release\MockDataDebugVisualizer.dll" "%25USERPROFILE%25\Documents\Visual Studio 2015\Visualizers" /y /r 
+xcopy "$(ProjectDir)bin\Release\MockDataDebugVisualizer.dll" "%25USERPROFILE%25\Documents\Visual Studio 2015\Visualizers" /r /y
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

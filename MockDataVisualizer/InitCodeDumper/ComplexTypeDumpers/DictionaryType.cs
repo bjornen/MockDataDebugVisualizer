@@ -31,9 +31,9 @@ namespace MockDataDebugVisualizer.InitCodeDumper.ComplexTypeDumpers
             {
                 dynamic keyValue = element;
 
-                var keyDumper = GetDumper(keyValue.Key, keyValue.Key.GetType().Name);
+                var keyDumper = DumperFactory.GetDumper(keyValue.Key, keyValue.Key.GetType().Name);
 
-                var valueDumper = GetDumper(keyValue.Value, keyValue.Value.GetType().Name);
+                var valueDumper = DumperFactory.GetDumper(keyValue.Value, keyValue.Value.GetType().Name);
 
                 keyDumper.ResolveInitCode(codeBuilder);
 

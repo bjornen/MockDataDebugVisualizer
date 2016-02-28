@@ -11,7 +11,7 @@ namespace MockDataDebugVisualizer.InitCodeDumper
 
             if (IsGenericType(element.GetType()))
             {
-                typeName = ResolveTypeName(element.GetType());
+                typeName = ResolveActualTypeName(element.GetType());
             }
 
             ElementName = $"{LowerCaseFirst(typeName)}_{ObjectCounter++}";
